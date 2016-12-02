@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tonglil/labeler/types"
+	"github.com/tonglil/labeler/writer"
+
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
 )
@@ -99,7 +102,7 @@ func main() {
 		fatal(err)
 	}
 
-	opt := &Options{
+	opt := &types.Options{
 		DryRun: dryrun,
 		Repo:   repo,
 	}
@@ -109,11 +112,11 @@ func main() {
 	fmt.Println("token:", token)
 	fmt.Printf("options: %+v", opt)
 
-	//if scan {
-	//reader.Run(client, file, opt)
-	//} else {
-	//writer.Run(client, file, opt)
-	//}
+	if scan {
+		//reader.Run(client, file, opt)
+	} else {
+		writer.Run(client, file, opt)
+	}
 
 	os.Exit(0)
 }

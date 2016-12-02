@@ -8,11 +8,6 @@ import (
 	"github.com/google/go-github/github"
 )
 
-type Options struct {
-	DryRun bool
-	Repo   string
-}
-
 func fatal(e error) {
 	fmt.Fprintln(os.Stderr, e)
 	os.Exit(1)
