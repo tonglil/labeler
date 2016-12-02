@@ -1,0 +1,14 @@
+repo: tonglil/labeler
+labels:
+  - name: bug
+    color: fc2929
+  - name: fix
+    color: fbca04
+    # if label doesn't exist
+    #   if from exists: rename from to it
+    #   else create it
+  - name: feature
+    color: 0052cc
+    from: help wanted
+  - name: enhancement
+    color: 0e8a16
