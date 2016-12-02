@@ -5,17 +5,19 @@ import (
 	"fmt"
 	"os"
 
-	"golang.org/x/oauth2"
-
 	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 )
 
 const (
+	api      = "https://api.github.com/"
+	apiEnv   = "GITHUB_API"
 	tokenEnv = "GITHUB_TOKEN"
 )
 
 var (
-	version = "0.0.0"
+	// Deliberately uninitialized, see getVersion().
+	version string
 )
 
 var (
@@ -51,9 +53,9 @@ func init() {
 	flag.BoolVar(&scan, "scan", false, "Scan the repo for label information")
 
 	flag.BoolVar(&dryrun, "dry-run", false, "Show what would happen")
-	flag.StringVar(&token, "token", "", "Use a different GithHub token (default: \"from GITHUB_TOKEN environment variable\")")
-	flag.StringVar(&endpoint, "endpoint", "https://api.github.com", "Use a different GithHub API endpoint")
 	flag.StringVar(&repo, "repo", "", "Use a different repository (default: \"from file\")")
+	flag.StringVar(&token, "token", "", "Use a different GithHub token [overrides GITHUB_TOKEN environment variable]")
+	flag.StringVar(&endpoint, "endpoint", api, "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
 
 	flag.BoolVar(&help, "help", false, "Show help")
 	flag.BoolVar(&versionFlag, "version", false, "Show version")
@@ -62,7 +64,7 @@ func init() {
 }
 
 // labeler labels.yaml
-// labeler -scan -endpoint labels.yaml
+// labeler -scan -endpoint https://git.my-org.com/ labels.yaml
 
 func main() {
 	flag.Parse()
@@ -72,19 +74,18 @@ func main() {
 	}
 
 	if versionFlag {
-		fmt.Fprintf(os.Stdout, "version %s\n", version)
+		fmt.Fprintf(os.Stdout, "version %s\n", getVersion())
 		os.Exit(0)
 	}
 
-	if token == "" {
-		token = os.Getenv(tokenEnv)
-		if token == "" {
-			fmt.Printf("missing environment variable %s\n", tokenEnv)
-			os.Exit(1)
-		}
-	}
+	file := flag.Args()[0]
 
-	fmt.Println("Starting...")
+	endpoint := getEndpoint(endpoint)
+
+	token, err := getToken(token)
+	if err != nil {
+		fatal(err)
+	}
 
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
@@ -92,7 +93,27 @@ func main() {
 	tc := oauth2.NewClient(oauth2.NoContext, ts)
 
 	client := github.NewClient(tc)
-	fmt.Println(client)
+
+	err = setEndpoint(client, endpoint)
+	if err != nil {
+		fatal(err)
+	}
+
+	opt := &Options{
+		DryRun: dryrun,
+		Repo:   repo,
+	}
+
+	fmt.Println("file:", file)
+	fmt.Println("endpoint:", client.BaseURL)
+	fmt.Println("token:", token)
+	fmt.Printf("options: %+v", opt)
+
+	//if scan {
+	//reader.Run(client, file, opt)
+	//} else {
+	//writer.Run(client, file, opt)
+	//}
 
 	os.Exit(0)
 }

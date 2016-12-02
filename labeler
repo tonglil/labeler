@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euo pipefail
 
-go run main.go $*
+go run *.go $*
