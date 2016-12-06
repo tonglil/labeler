@@ -107,9 +107,45 @@ func Create(client *github.Client, opt *types.Options, local []*types.Label, rem
 	return remain, nil
 }
 
+func Delete(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) error {
+	for _, l := range remote {
+		if _, ok := localHas(*l.Name, local); ok {
+			continue
+		}
+
+		if _, ok := localRenamed(*l.Name, local); ok {
+			continue
+		}
+
+		glog.Infof("DELETE:\n  name:  %s\n  color: %s\n", *l.Name, *l.Color)
+	}
+
+	return nil
+}
+
 func remoteHas(name string, labels []*github.Label) (*github.Label, bool) {
 	for _, l := range labels {
 		if name == *l.Name {
+			return l, true
+		}
+	}
+
+	return nil, false
+}
+
+func localHas(name string, labels []*types.Label) (*types.Label, bool) {
+	for _, l := range labels {
+		if name == l.Name {
+			return l, true
+		}
+	}
+
+	return nil, false
+}
+
+func localRenamed(name string, labels []*types.Label) (*types.Label, bool) {
+	for _, l := range labels {
+		if name == l.From {
 			return l, true
 		}
 	}
