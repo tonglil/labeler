@@ -5,11 +5,12 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/golang/glog"
 	"github.com/google/go-github/github"
 )
 
 func fatal(e error) {
-	fmt.Fprintln(os.Stderr, e)
+	glog.V(0).Info(e)
 	os.Exit(1)
 }
 

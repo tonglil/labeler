@@ -64,6 +64,8 @@ func init() {
 	flag.BoolVar(&versionFlag, "version", false, "Show version")
 
 	flag.Usage = usage
+
+	flag.Set("logtostderr", "true")
 }
 
 // labeler labels.yaml
