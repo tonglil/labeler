@@ -20,12 +20,8 @@ var steps = `
 4. Delete: l.Name compliment of locale
 `
 
+// Run executes the write actions against the repo.
 func Run(client *github.Client, file string, opt *types.Options) error {
-	// open file
-	// unmarshal file contents
-	// configure the right repo
-	// ep = [https://api.github.com/] repos/ [tonglil/labeler] /labels
-	// get all remote labels from repo
 	// for l in local labels with "from:"
 	// if l doesn't exist
 	//   if l.From exists
@@ -44,19 +40,67 @@ func Run(client *github.Client, file string, opt *types.Options) error {
 	// do create non-existing local labels
 	// do update existing local labels
 	// do delete remaining remote labels
+
 	lf, err := ReadConfigFile(file)
 	if err != nil {
 		return err
 	}
 
-	if opt.Repo == "" {
-		opt.Repo = lf.Repo
+	opt.Repo, err = GetRepo(opt, lf)
+	if err != nil {
+		glog.V(0).Infof("No repo provided")
+		return err
 	}
 
-	if opt.Repo == "" {
-		glog.V(0).Infof("No repo provided")
-		return fmt.Errorf("no repo")
+	err = opt.ValidateRepo()
+	if err != nil {
+		glog.V(0).Infof("Failed to parse repo format: owner/name")
+		return err
 	}
+
+	// Get all remote labels from repo
+	labelsRemote, err := GetRemoteLabels(client, opt)
+	if err != nil {
+		return err
+	}
+
+	// Rename
+	labels, err := Rename(client, opt, lf.Labels, labelsRemote)
+	if err != nil {
+		return err
+	}
+
+	for _, l := range labels {
+		glog.Infof("POST RENAME:\n  name:  %s\n  color: %s\n  from:  %s\n", l.Name, l.Color, l.From)
+	}
+
+	// Update
+	labels, err = Update(client, opt, labels, labelsRemote)
+	if err != nil {
+		return err
+	}
+
+	for _, l := range labels {
+		glog.Infof("POST UPDATE:\n  name:  %s\n  color: %s\n  from:  %s\n", l.Name, l.Color, l.From)
+	}
+
+	// Create
+	labels, err = Create(client, opt, labels, labelsRemote)
+	if err != nil {
+		return err
+	}
+
+	for _, l := range labels {
+		glog.Infof("POST CREATE:\n  name:  %s\n  color: %s\n  from:  %s\n", l.Name, l.Color, l.From)
+	}
+
+	// Delete
+	err = Delete(client, opt, lf.Labels, labelsRemote)
+	if err != nil {
+		return err
+	}
+
+	glog.Info("POST DELETE")
 
 	return nil
 }
