@@ -109,9 +109,17 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 	var remain []*types.Label
 
 	for _, l := range local {
-		if r, ok := remoteHas(l.From, remote); ok {
-			glog.Infof("RENAME:\n  name:  %s -> %s\n  color: %s -> %s\n", *r.Name, l.Name, *r.Color, l.Color)
-			continue
+		if l.From != "" {
+			if _, ok := remoteHas(l.Name, remote); ok {
+				glog.Infof("Skipped renaming '%s' from '%s': label already exists", l.Name, l.From)
+				glog.Infof("Please update your ___file___")
+				continue
+			}
+
+			if r, ok := remoteHas(l.From, remote); ok {
+				glog.Infof("RENAME:\n  name:  %s -> %s\n  color: %s -> %s\n", *r.Name, l.Name, *r.Color, l.Color)
+				continue
+			}
 		}
 
 		remain = append(remain, l)
