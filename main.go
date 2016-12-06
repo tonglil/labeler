@@ -105,8 +105,9 @@ func main() {
 	}
 
 	opt := &types.Options{
-		DryRun: dryrun,
-		Repo:   repo,
+		DryRun:   dryrun,
+		Repo:     repo,
+		Filename: file,
 	}
 
 	fmt.Println("file:", file)
