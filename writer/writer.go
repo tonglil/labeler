@@ -136,7 +136,5 @@ func ReadConfigFile(file string) (*types.LabelFile, error) {
 		return nil, err
 	}
 
-	glog.Info(lf)
-
 	return &lf, nil
 }
