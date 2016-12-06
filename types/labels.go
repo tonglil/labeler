@@ -1,6 +1,6 @@
 package types
 
-type File struct {
+type LabelFile struct {
 	Repo   string  `yaml:"repo"`
 	Labels []Label `yaml:"labels"`
 }
