@@ -79,6 +79,7 @@ func GetRemoteLabels(client *github.Client, opt *types.Options) ([]*github.Label
 			glog.V(0).Infof("Failed to fetch labels from Github")
 			return nil, err
 		}
+		glog.V(4).Infof("Response: %s", resp)
 
 		labelsRemote = append(labelsRemote, labels...)
 
