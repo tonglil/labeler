@@ -109,11 +109,7 @@ func Create(client *github.Client, opt *types.Options, local []*types.Label, rem
 
 func Delete(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) error {
 	for _, l := range remote {
-		if _, ok := localHas(*l.Name, local); ok {
-			continue
-		}
-
-		if _, ok := localRenamed(*l.Name, local); ok {
+		if _, ok := localHasOrRenamed(*l.Name, local); ok {
 			continue
 		}
 
@@ -133,19 +129,9 @@ func remoteHas(name string, labels []*github.Label) (*github.Label, bool) {
 	return nil, false
 }
 
-func localHas(name string, labels []*types.Label) (*types.Label, bool) {
+func localHasOrRenamed(name string, labels []*types.Label) (*types.Label, bool) {
 	for _, l := range labels {
-		if name == l.Name {
-			return l, true
-		}
-	}
-
-	return nil, false
-}
-
-func localRenamed(name string, labels []*types.Label) (*types.Label, bool) {
-	for _, l := range labels {
-		if name == l.From {
+		if name == l.Name || name == l.From {
 			return l, true
 		}
 	}
