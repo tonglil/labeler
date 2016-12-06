@@ -7,10 +7,11 @@ import (
 
 // Options passed during the execution of Labeler.
 type Options struct {
-	DryRun bool
-	Repo   string
-	owner  string
-	name   string
+	DryRun   bool
+	Repo     string
+	Filename string
+	owner    string
+	name     string
 }
 
 // ValidateRepo checks the repo name is well formatted.
