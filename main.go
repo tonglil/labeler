@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/golang/glog"
 	"github.com/tonglil/labeler/types"
 	"github.com/tonglil/labeler/writer"
 
@@ -108,6 +109,10 @@ func main() {
 		DryRun:   dryrun,
 		Repo:     repo,
 		Filename: file,
+	}
+
+	if opt.DryRun {
+		glog.V(0).Infof("Dry run enabled - changes will not be applied")
 	}
 
 	if scan {
