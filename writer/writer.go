@@ -62,6 +62,61 @@ func Run(client *github.Client, file string, opt *types.Options) error {
 	return nil
 }
 
+func Rename(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, error) {
+	var remain []*types.Label
+
+	for _, l := range local {
+		if r, ok := remoteHas(l.From, remote); ok {
+			glog.Infof("RENAME:\n  name:  %s -> %s\n  color: %s -> %s\n", *r.Name, l.Name, *r.Color, l.Color)
+			continue
+		}
+
+		remain = append(remain, l)
+	}
+
+	return remain, nil
+}
+
+func Update(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, error) {
+	var remain []*types.Label
+
+	for _, l := range local {
+		if r, ok := remoteHas(l.Name, remote); ok {
+			glog.Infof("UPDATE:\n  name:  %s -> %s\n  color: %s -> %s\n", *r.Name, l.Name, *r.Color, l.Color)
+			continue
+		}
+
+		remain = append(remain, l)
+	}
+
+	return remain, nil
+}
+
+func Create(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, error) {
+	var remain []*types.Label
+
+	for _, l := range local {
+		if _, ok := remoteHas(l.Name, remote); !ok {
+			glog.Infof("CREATE:\n  name:  %s\n  color: %s\n", l.Name, l.Color)
+			continue
+		}
+
+		remain = append(remain, l)
+	}
+
+	return remain, nil
+}
+
+func remoteHas(name string, labels []*github.Label) (*github.Label, bool) {
+	for _, l := range labels {
+		if name == *l.Name {
+			return l, true
+		}
+	}
+
+	return nil, false
+}
+
 // GetRemoteLabels fetches all labels in a repository, iterating over pages for 50 at a time.
 func GetRemoteLabels(client *github.Client, opt *types.Options) ([]*github.Label, error) {
 	var labelsRemote []*github.Label
