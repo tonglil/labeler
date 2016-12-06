@@ -62,6 +62,20 @@ func Run(client *github.Client, file string, opt *types.Options) error {
 	return nil
 }
 
+// GetRepo configures the repo being used as determined by the option, and then the label file.
+func GetRepo(opt *types.Options, lf *types.LabelFile) (string, error) {
+	if opt.Repo != "" {
+		return opt.Repo, nil
+	}
+
+	if lf.Repo != "" {
+		return lf.Repo, nil
+	}
+
+	return "", fmt.Errorf("no repo")
+}
+
+// ReadConfigFile opens the label file and reads its contents into a LabelFile.
 func ReadConfigFile(file string) (*types.LabelFile, error) {
 	path, err := filepath.Abs(file)
 	if err != nil {
