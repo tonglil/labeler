@@ -110,15 +110,14 @@ func main() {
 		Filename: file,
 	}
 
-	fmt.Println("file:", file)
-	fmt.Println("endpoint:", client.BaseURL)
-	fmt.Println("token:", token)
-	fmt.Printf("options: %+v", opt)
-
 	if scan {
 		//reader.Run(client, file, opt)
 	} else {
-		writer.Run(client, file, opt)
+		err = writer.Run(client, file, opt)
+	}
+
+	if err != nil {
+		fatal(err)
 	}
 
 	os.Exit(0)
