@@ -38,49 +38,52 @@ func Run(client *github.Client, file string, opt *types.Options) error {
 		return err
 	}
 
+	var n, total int
+
 	// Rename
-	labels, err := Rename(client, opt, lf.Labels, labelsRemote)
+	labels, n, err := Rename(client, opt, lf.Labels, labelsRemote)
 	if err != nil {
 		return err
 	}
 
-	for _, l := range labels {
-		glog.Infof("POST RENAME:\n  name:  %s\n  color: %s\n  from:  %s\n", l.Name, l.Color, l.From)
-	}
+	glog.V(6).Infof("Finished renaming %d labels", n)
+	total += n
 
 	// Update
-	labels, err = Update(client, opt, labels, labelsRemote)
+	labels, n, err = Update(client, opt, labels, labelsRemote)
 	if err != nil {
 		return err
 	}
 
-	for _, l := range labels {
-		glog.Infof("POST UPDATE:\n  name:  %s\n  color: %s\n  from:  %s\n", l.Name, l.Color, l.From)
-	}
+	glog.V(6).Infof("Finished updating %d labels", n)
+	total += n
 
 	// Create
-	labels, err = Create(client, opt, labels, labelsRemote)
+	labels, n, err = Create(client, opt, labels, labelsRemote)
 	if err != nil {
 		return err
 	}
 
-	for _, l := range labels {
-		glog.Infof("POST CREATE:\n  name:  %s\n  color: %s\n  from:  %s\n", l.Name, l.Color, l.From)
-	}
+	glog.V(6).Infof("Finished creating %d labels", n)
+	total += n
 
 	// Delete
-	err = Delete(client, opt, lf.Labels, labelsRemote)
+	n, err = Delete(client, opt, lf.Labels, labelsRemote)
 	if err != nil {
 		return err
 	}
 
-	glog.Info("POST DELETE")
+	glog.V(6).Infof("Finished deleting %d labels", n)
+	total += n
+
+	glog.V(6).Infof("Processed %d labels in total", total)
 
 	return nil
 }
 
-func Rename(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, error) {
+func Rename(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, int, error) {
 	var remain []*types.Label
+	var count int
 
 	for _, l := range local {
 		if l.From != "" {
@@ -90,7 +93,8 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 			}
 
 			if r, ok := remoteHas(l.From, remote); ok {
-				glog.Infof("RENAME:\n  name:  %s -> %s\n  color: %s -> %s\n", *r.Name, l.Name, *r.Color, l.Color)
+				count++
+				glog.V(4).Infof("Renaming '%s' to '%s' with color '%s' to '%s'\n", *r.Name, l.Name, *r.Color, l.Color)
 				continue
 			}
 		}
@@ -98,49 +102,56 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 		remain = append(remain, l)
 	}
 
-	return remain, nil
+	return remain, count, nil
 }
 
-func Update(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, error) {
+func Update(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, int, error) {
 	var remain []*types.Label
+	var count int
 
 	for _, l := range local {
 		if r, ok := remoteHas(l.Name, remote); ok {
-			glog.Infof("UPDATE:\n  name:  %s -> %s\n  color: %s -> %s\n", *r.Name, l.Name, *r.Color, l.Color)
+			count++
+			glog.V(4).Infof("Updating '%s' with color '%s' to '%s'\n", l.Name, *r.Color, l.Color)
 			continue
 		}
 
 		remain = append(remain, l)
 	}
 
-	return remain, nil
+	return remain, count, nil
 }
 
-func Create(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, error) {
+func Create(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, int, error) {
 	var remain []*types.Label
+	var count int
 
 	for _, l := range local {
 		if _, ok := remoteHas(l.Name, remote); !ok {
-			glog.Infof("CREATE:\n  name:  %s\n  color: %s\n", l.Name, l.Color)
+			count++
+			glog.V(4).Infof("Creating '%s' with color '%s'\n", l.Name, l.Color)
 			continue
 		}
 
 		remain = append(remain, l)
 	}
 
-	return remain, nil
+	return remain, count, nil
 }
 
-func Delete(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) error {
+func Delete(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) (int, error) {
+	var count int
+
 	for _, l := range remote {
 		if _, ok := localHasOrRenamed(*l.Name, local); ok {
 			continue
 		}
 
-		glog.Infof("DELETE:\n  name:  %s\n  color: %s\n", *l.Name, *l.Color)
+		count++
+		glog.V(4).Infof("Deleting '%s' with color '%s'\n", *l.Name, *l.Color)
 	}
 
-	return nil
+	return count, nil
 }
 
 func remoteHas(name string, labels []*github.Label) (*github.Label, bool) {
