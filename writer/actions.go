@@ -42,7 +42,7 @@ func Update(client *github.Client, opt *types.Options, local []*types.Label, rem
 	var count int
 
 	for _, l := range local {
-		if r, ok := remoteHas(l.Name, remote); ok {
+		if r, ok := remoteHas(l.Name, remote); ok && l.Color != *r.Color {
 			glog.V(4).Infof("Updating '%s' with color '%s' to '%s'\n", l.Name, *r.Color, l.Color)
 
 			if opt.DryRun {
