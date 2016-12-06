@@ -76,7 +76,7 @@ func Run(client *github.Client, file string, opt *types.Options) error {
 	glog.V(6).Infof("Finished deleting %d labels", n)
 	total += n
 
-	glog.V(6).Infof("Processed %d labels in total", total)
+	glog.V(4).Infof("Processed %d labels in total", total)
 
 	return nil
 }
