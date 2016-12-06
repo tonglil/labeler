@@ -69,9 +69,6 @@ func init() {
 	flag.Set("logtostderr", "true")
 }
 
-// labeler labels.yaml
-// labeler -scan -endpoint https://git.my-org.com/ labels.yaml
-
 func main() {
 	flag.Parse()
 
