@@ -6,12 +6,11 @@ import (
 	"os"
 	"path/filepath"
 
-	yaml "gopkg.in/yaml.v2"
-
 	"github.com/tonglil/labeler/types"
 
 	"github.com/golang/glog"
 	"github.com/google/go-github/github"
+	yaml "gopkg.in/yaml.v2"
 )
 
 var steps = `
