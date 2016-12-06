@@ -20,6 +20,12 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 
 			if r, ok := remoteHas(l.From, remote); ok {
 				glog.V(4).Infof("Renaming '%s' to '%s' with color '%s' to '%s'\n", *r.Name, l.Name, *r.Color, l.Color)
+
+				if opt.DryRun {
+					count++
+					continue
+				}
+
 				count++
 				continue
 			}
@@ -38,6 +44,12 @@ func Update(client *github.Client, opt *types.Options, local []*types.Label, rem
 	for _, l := range local {
 		if r, ok := remoteHas(l.Name, remote); ok {
 			glog.V(4).Infof("Updating '%s' with color '%s' to '%s'\n", l.Name, *r.Color, l.Color)
+
+			if opt.DryRun {
+				count++
+				continue
+			}
+
 			count++
 			continue
 		}
@@ -55,6 +67,12 @@ func Create(client *github.Client, opt *types.Options, local []*types.Label, rem
 	for _, l := range local {
 		if _, ok := remoteHas(l.Name, remote); !ok {
 			glog.V(4).Infof("Creating '%s' with color '%s'\n", l.Name, l.Color)
+
+			if opt.DryRun {
+				count++
+				continue
+			}
+
 			count++
 			continue
 		}
@@ -74,6 +92,12 @@ func Delete(client *github.Client, opt *types.Options, local []*types.Label, rem
 		}
 
 		glog.V(4).Infof("Deleting '%s' with color '%s'\n", *l.Name, *l.Color)
+
+		if opt.DryRun {
+			count++
+			continue
+		}
+
 		count++
 	}
 
