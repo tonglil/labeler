@@ -24,7 +24,7 @@ before_deploy:
 
 deploy:
   provider: script
-  script: bin/deploy
+  script: bin/dist
   on:
     tags: true
 
