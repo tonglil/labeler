@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/golang/glog"
+	"github.com/tonglil/labeler/reader"
 	"github.com/tonglil/labeler/types"
 	"github.com/tonglil/labeler/writer"
 
@@ -113,7 +114,7 @@ func main() {
 	}
 
 	if scan {
-		//reader.Run(client, file, opt)
+		err = reader.Run(client, file, opt)
 	} else {
 		err = writer.Run(client, file, opt)
 	}

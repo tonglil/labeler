@@ -12,6 +12,28 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+func ReadFileOrCreate(file string) (*types.LabelFile, error) {
+	path, err := filepath.Abs(file)
+	if err != nil {
+		glog.V(0).Infof("Failed to find %s", file)
+		return nil, err
+	}
+
+	_, err = os.Stat(path)
+	if os.IsNotExist(err) {
+		glog.V(0).Infof("Creating file %s", path)
+
+		f, err := os.Create(file)
+		if err != nil {
+			glog.V(0).Infof("Failed to create file %s", file)
+			return nil, err
+		}
+		f.Close()
+	}
+
+	return ReadFile(file)
+}
+
 // ReadFile opens the label file and reads its contents into a LabelFile.
 func ReadFile(file string) (*types.LabelFile, error) {
 	path, err := filepath.Abs(file)
@@ -44,6 +66,31 @@ func ReadFile(file string) (*types.LabelFile, error) {
 	}
 
 	return &lf, nil
+}
+
+// WriteFile opens the label file and overwrites the LabelFile into its contents.
+func WriteFile(file string, lf *types.LabelFile) error {
+	path, err := filepath.Abs(file)
+	if err != nil {
+		glog.V(0).Infof("Failed to find %s", file)
+		return err
+	}
+
+	data, err := yaml.Marshal(lf)
+	if err != nil {
+		glog.V(0).Infof("Failed to marshal %T", lf)
+		return err
+	}
+
+	err = ioutil.WriteFile(path, data, 0644)
+	if err != nil {
+		glog.V(0).Infof("Failed to write %s", path)
+		return err
+	}
+
+	glog.V(4).Infof("Wrote file %s", path)
+
+	return nil
 }
 
 // GetRepo configures the repo being used as determined by the option, and then the label file.
