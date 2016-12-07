@@ -40,7 +40,7 @@ var (
 )
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage: %s [-version] [-help] [<options>] <file.yaml>\n", os.Args[0])
+	fmt.Fprintf(os.Stderr, "usage: %s [<options>] <file.yaml>\n", os.Args[0])
 	fmt.Fprintln(os.Stderr, "")
 	fmt.Fprintln(os.Stderr, "Manage labels on GitHub as code")
 	fmt.Fprintln(os.Stderr, "")
@@ -56,8 +56,8 @@ func usage() {
 func init() {
 	flag.BoolVar(&scan, "scan", false, "Scan the repo for label information")
 
-	flag.BoolVar(&dryrun, "dry-run", false, "Show what would happen")
-	flag.StringVar(&repo, "repo", "", "Use a different repository (default: \"from file\")")
+	flag.BoolVar(&dryrun, "dry-run", false, "Show what would happen (default false)")
+	flag.StringVar(&repo, "repo", "", "Use a different repository (default \"from file\")")
 	flag.StringVar(&token, "token", "", "Use a different GithHub token [overrides GITHUB_TOKEN environment variable]")
 	flag.StringVar(&endpoint, "endpoint", api, "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
 
