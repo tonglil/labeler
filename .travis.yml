@@ -1,0 +1,38 @@
+sudo: false
+
+language: go
+
+go:
+  - 1.x
+
+env:
+  global:
+    - CGO_ENABLED=0
+    - VERSION=$TRAVIS_TAG
+    - GIT_SHA=${TRAVIS_COMMIT:0:7}
+
+cache:
+  directories:
+  - $GOPATH/src
+
+before_script:
+  - go get -u gopkg.in/alecthomas/gometalinter.v1
+  - gometalinter.v1 --install
+
+script:
+  - go test .
+  - gometalinter.v1 --vendor ./... || true
+
+before_deploy:
+  - go get -u github.com/aktau/github-release
+
+deploy:
+  provider: script
+  script: bin/dist
+  on:
+    tags: true
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
