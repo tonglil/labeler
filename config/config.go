@@ -12,11 +12,11 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func ReadFileOrCreate(file string) (*types.LabelFile, error) {
+func CreateIfMissing(file string) error {
 	path, err := filepath.Abs(file)
 	if err != nil {
 		glog.V(0).Infof("Failed to find %s", file)
-		return nil, err
+		return err
 	}
 
 	_, err = os.Stat(path)
@@ -26,12 +26,12 @@ func ReadFileOrCreate(file string) (*types.LabelFile, error) {
 		f, err := os.Create(file)
 		if err != nil {
 			glog.V(0).Infof("Failed to create file %s", file)
-			return nil, err
+			return err
 		}
 		f.Close()
 	}
 
-	return ReadFile(file)
+	return nil
 }
 
 // ReadFile opens the label file and reads its contents into a LabelFile.

@@ -14,7 +14,14 @@ import (
 
 // Run executes the write actions against the repo.
 func Run(client *github.Client, file string, opt *types.Options) error {
-	lf, err := config.ReadFileOrCreate(file)
+	// TODO:
+	// DryRun should cleanup if missing as well...
+	err := config.CreateIfMissing(file)
+	if err != nil {
+		return err
+	}
+
+	lf, err := config.ReadFile(file)
 	if err != nil {
 		return err
 	}
