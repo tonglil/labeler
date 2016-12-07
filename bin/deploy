@@ -1,0 +1,45 @@
+#!/bin/bash
+set -euo pipefail
+
+# Default to edge release if the VERSION isn't set.
+RELEASE=${VERSION-edge}
+
+if [ -z ${GIT_SHA-} ]; then
+    GIT_SHA=$(git rev-parse --short HEAD)
+    echo "Using local git sha ${GIT_SHA}"
+fi
+
+cd $(cd `dirname "$0"`; cd ..; pwd)
+
+TARGETS="darwin-amd64 linux-amd64 windows"
+
+for target in $TARGETS; do
+  t=(${target//-/ })
+
+  export GOOS=${t[0]}
+  export GOARCH=${t[1]}
+
+  NAME=labeler
+  if [ $GOOS == "windows" ]; then
+    NAME=${NAME}.exe
+  fi
+
+  DEST="dist/${target}"
+  mkdir -p ${DEST}
+  FILE="${DEST}/${NAME}"
+
+  echo "Building for ${target} to ${FILE}..."
+  go build -ldflags "-X main.build_version=${RELEASE}-${GIT_SHA}" -o "${FILE}"
+
+  REPO=(${TRAVIS_REPO_SLUG//\// })
+
+  github-release upload \
+    --user ${REPO[0]} \
+    --repo ${REPO[1]} \
+    --tag ${TRAVIS_TAG} \
+    --name "${NAME}-${TARGET}" \
+    --file "${FILE}"
+  echo "Uploading ${FILE} to the GitHub release ${TRAVIS_TAG}..."
+done
+
+echo "Done publishing the release"
