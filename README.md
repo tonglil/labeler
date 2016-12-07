@@ -1,14 +1,34 @@
 # Labeler [![Build Status](https://travis-ci.org/tonglil/labeler.svg?branch=master)](https://travis-ci.org/tonglil/labeler)
 
+![logo](http://i.imgur.com/5wOQl2m.png)
+
 Label management (create/rename/update/delete) on Github as code.
 
 - [x] Using GitHub?
-- [x] Want to commit/copy/paste/share your label configuration?
+- [x] Want to commit/copy/share your label configuration?
 - [ ] Use `labeler`!
 
-Inspired by the organized [labels in the Kubernetes project][kubernetes].
+For FOSS maintainers, enable your users to submit PRs and improve the process/label system!
+- [Clean up][adobe] your labels.
+- Move labels out of the [same][iconic] [flat][certbot] [space][ghost].
+- Enforce a label color scheme that is not [meaningless][node] nor [confusing][babel] to view.
 
-[kubernetes]: https://github.com/kubernetes/kubernetes/labels
+Inspired by [infrastructure as code][iac] tools like [Terraform][terraform] and organized label systems in projects like these:
+- https://github.com/kubernetes/kubernetes/labels
+- https://github.com/coreos/etcd/labels
+- https://github.com/coreos/rkt/labels
+- https://github.com/spf13/hugo/labels
+- https://github.com/docker/docker/labels
+
+[adobe]: https://github.com/adobe/brackets/labels
+[iconic]: https://github.com/driftyco/ionic/labels
+[certbot]: https://github.com/certbot/certbot/labels
+[ghost]: https://github.com/TryGhost/Ghost/labels
+[node]: https://github.com/nodejs/node/labels
+[babel]: https://github.com/babel/babel/labels
+
+[iac]: http://martinfowler.com/bliki/InfrastructureAsCode.html
+[terraform]: https://github.com/hashicorp/terraform
 
 ## Installation
 
@@ -101,7 +121,7 @@ Help me create a runnable test suite.
 
 ## See also
 
-Rust: https://github.com/jimmycuadra/ghlabel
-Node: https://github.com/popomore/github-labels
-Node: https://github.com/repo-utils/org-labels
-PHP: https://gist.github.com/zot24/0cbbd3ee4b22123cb62a
+- Rust: https://github.com/jimmycuadra/ghlabel
+- Node: https://github.com/popomore/github-labels
+- Node: https://github.com/repo-utils/org-labels
+- PHP: https://gist.github.com/zot24/0cbbd3ee4b22123cb62a
