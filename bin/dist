@@ -29,7 +29,7 @@ for target in $TARGETS; do
   FILE="${DEST}/${NAME}"
 
   echo "Building for ${target} to ${FILE}..."
-  go build -ldflags "-X main.build_version=${RELEASE}-${GIT_SHA}" -o "${FILE}"
+  go build -ldflags "-X main.version=${RELEASE}-${GIT_SHA}" -o "${FILE}"
 
   if [ "${CI-false}" == "true" ]; then
     REPO=(${TRAVIS_REPO_SLUG//\// })
