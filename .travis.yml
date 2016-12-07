@@ -11,6 +11,10 @@ env:
     - VERSION=$TRAVIS_TAG
     - GIT_SHA=${TRAVIS_COMMIT:0:7}
 
+cache:
+  directories:
+  - $GOPATH/src
+
 before_script:
   - go get -u gopkg.in/alecthomas/gometalinter.v1
   - gometalinter.v1 --install
