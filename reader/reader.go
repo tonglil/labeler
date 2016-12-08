@@ -1,16 +1,26 @@
-package writer
+package reader
 
 import (
+	"encoding/json"
+
 	"github.com/tonglil/labeler/config"
 	"github.com/tonglil/labeler/remote"
 	"github.com/tonglil/labeler/types"
 
 	"github.com/golang/glog"
 	"github.com/google/go-github/github"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // Run executes the write actions against the repo.
 func Run(client *github.Client, file string, opt *types.Options) error {
+	// TODO:
+	// DryRun should cleanup if missing as well...
+	err := config.CreateIfMissing(file)
+	if err != nil {
+		return err
+	}
+
 	lf, err := config.ReadFile(file)
 	if err != nil {
 		return err
@@ -34,43 +44,39 @@ func Run(client *github.Client, file string, opt *types.Options) error {
 		return err
 	}
 
-	var n, total int
+	total := len(labelsRemote)
 
-	// Rename
-	labels, n, err := Rename(client, opt, lf.Labels, labelsRemote)
+	x, err := json.Marshal(labelsRemote)
 	if err != nil {
+		glog.V(0).Infof("Failed to marshal labels from remote format")
 		return err
 	}
 
-	glog.V(6).Infof("Finished renaming %d labels", n)
-	total += n
+	labels := []*types.Label{}
 
-	// Update
-	labels, n, err = Update(client, opt, labels, labelsRemote)
+	// TODO:
+	// Can we directly unmarshal from labelsRemote?
+	err = yaml.Unmarshal(x, &labels)
 	if err != nil {
+		glog.V(0).Infof("Failed to unmarshal labels to local format")
 		return err
 	}
 
-	glog.V(6).Infof("Finished updating %d labels", n)
-	total += n
-
-	// Create
-	labels, n, err = Create(client, opt, labels, labelsRemote)
-	if err != nil {
-		return err
+	for _, l := range labels {
+		glog.V(4).Infof("Fetched '%s' with color '%s'\n", l.Name, l.Color)
 	}
 
-	glog.V(6).Infof("Finished creating %d labels", n)
-	total += n
-
-	// Delete
-	n, err = Delete(client, opt, lf.Labels, labelsRemote)
-	if err != nil {
-		return err
+	lf = &types.LabelFile{
+		Repo:   opt.Repo,
+		Labels: labels,
 	}
 
-	glog.V(6).Infof("Finished deleting %d labels", n)
-	total += n
+	if !opt.DryRun {
+		err = config.WriteFile(file, lf)
+		if err != nil {
+			return err
+		}
+	}
 
 	glog.V(4).Infof("Processed %d labels in total", total)
 
