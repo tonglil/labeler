@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/golang/glog"
+	"github.com/tonglil/labeler/cmd"
 	"github.com/tonglil/labeler/reader"
 	"github.com/tonglil/labeler/types"
 	"github.com/tonglil/labeler/writer"
 
+	"github.com/golang/glog"
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
 )
@@ -71,6 +72,10 @@ func init() {
 }
 
 func main() {
+	cmd.Execute()
+
+	return
+
 	flag.Parse()
 
 	if help || len(flag.Args()) != 1 {
