@@ -44,7 +44,7 @@ go get github.com/tonglil/labeler
 
 ## Usage
 
-Read a [GitHub token][tokens] from the environment and apply the label configuration:
+First, set a [GitHub token][tokens] in the environment (optional, the token can be set as an cli argument as well).
 ```
 export GITHUB_TOKEN=xxx
 ```
