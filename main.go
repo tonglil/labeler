@@ -46,19 +46,19 @@ func usage() {
 }
 
 func init() {
-	flag.BoolVar(&scan, "scan", false, "Scan the repo for label information")
+	//flag.BoolVar(&scan, "scan", false, "Scan the repo for label information")
 
-	flag.BoolVar(&dryrun, "dry-run", false, "Show what would happen (default false)")
-	flag.StringVar(&repo, "repo", "", "Use a different repository (default \"from file\")")
-	flag.StringVar(&token, "token", "", "Use a different GithHub token [overrides GITHUB_TOKEN environment variable]")
-	flag.StringVar(&endpoint, "endpoint", "", "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
+	//flag.BoolVar(&dryrun, "dry-run", false, "Show what would happen (default false)")
+	//flag.StringVar(&repo, "repo", "", "Use a different repository (default \"from file\")")
+	//flag.StringVar(&token, "token", "", "Use a different GithHub token [overrides GITHUB_TOKEN environment variable]")
+	//flag.StringVar(&endpoint, "endpoint", "", "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
 
-	flag.BoolVar(&help, "help", false, "Show help")
-	flag.BoolVar(&versionFlag, "version", false, "Show version")
+	//flag.BoolVar(&help, "help", false, "Show help")
+	//flag.BoolVar(&versionFlag, "version", false, "Show version")
 
-	flag.Usage = usage
+	//flag.Usage = usage
 
-	flag.Set("logtostderr", "true")
+	//flag.Set("logtostderr", "true")
 }
 
 func main() {

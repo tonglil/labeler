@@ -4,19 +4,16 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tonglil/labeler/utils"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 const (
-	api      = "https://api.github.com/"
-	apiEnv   = "GITHUB_API"
-	tokenEnv = "GITHUB_TOKEN"
-)
-
-var (
-	// Deliberately uninitialized, see getVersion().
-	version string
+	api = "https://api.github.com/"
+	//apiEnv   = "GITHUB_API"
+	//tokenEnv = "GITHUB_TOKEN"
 )
 
 var (
@@ -27,8 +24,7 @@ var (
 	repo     string
 
 	// App info
-	help        bool
-	versionFlag bool
+	version bool
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -57,20 +53,10 @@ func Execute() {
 		os.Exit(-1)
 	}
 
-	fmt.Println("klasdjflksadjfklsajfklsjfl", versionFlag)
-
-	if versionFlag {
-		fmt.Fprintf(os.Stdout, "version %s\n", getVersion())
+	if version {
+		fmt.Fprintf(os.Stdout, "version %s\n", utils.GetVersion())
 		os.Exit(0)
 	}
-}
-
-func getVersion() string {
-	if version != "" {
-		return version
-	}
-
-	return "unknown"
 }
 
 func init() {
@@ -86,8 +72,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", api, "The GithHub API endpoint [overrides GITHUB_API]")
 
 	// Local flags, only run when this action is called directly.
-	v := RootCmd.Flags().BoolP("version", "v", true, "Show version")
-	fmt.Println(*v)
+	RootCmd.Flags().BoolVarP(&version, "version", "v", false, "Show version")
 }
 
 // initConfig reads in config file and ENV variables if set.
