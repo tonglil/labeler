@@ -1,20 +1,25 @@
-package main
+package utils
 
 import (
 	"fmt"
 	"net/url"
 	"os"
 
-	"github.com/golang/glog"
 	"github.com/google/go-github/github"
 )
 
-func fatal(e error) {
-	glog.V(0).Info(e)
-	os.Exit(1)
-}
+const (
+	api      = "https://api.github.com/"
+	apiEnv   = "GITHUB_API"
+	tokenEnv = "GITHUB_TOKEN"
+)
 
-func getToken(t string) (string, error) {
+var (
+	// Deliberately uninitialized, see GetVersion().
+	version string
+)
+
+func GetToken(t string) (string, error) {
 	// If token is set, use that.
 	if t != "" {
 		return t, nil
@@ -30,7 +35,7 @@ func getToken(t string) (string, error) {
 	return "", fmt.Errorf("missing environment variable %s", tokenEnv)
 }
 
-func getEndpoint(e string) string {
+func GetEndpoint(e string) string {
 	// If endpoint is different from the default, use that.
 	if e != api {
 		return e
@@ -46,7 +51,7 @@ func getEndpoint(e string) string {
 	return api
 }
 
-func setEndpoint(c *github.Client, e string) error {
+func SetEndpoint(c *github.Client, e string) error {
 	if e != api {
 		ep, err := url.Parse(e)
 		if err != nil {
@@ -59,7 +64,7 @@ func setEndpoint(c *github.Client, e string) error {
 	return nil
 }
 
-func getVersion() string {
+func GetVersion() string {
 	if version != "" {
 		return version
 	}

@@ -8,22 +8,12 @@ import (
 	"github.com/tonglil/labeler/cmd"
 	"github.com/tonglil/labeler/reader"
 	"github.com/tonglil/labeler/types"
+	"github.com/tonglil/labeler/utils"
 	"github.com/tonglil/labeler/writer"
 
 	"github.com/golang/glog"
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
-)
-
-const (
-	api      = "https://api.github.com/"
-	apiEnv   = "GITHUB_API"
-	tokenEnv = "GITHUB_TOKEN"
-)
-
-var (
-	// Deliberately uninitialized, see getVersion().
-	version string
 )
 
 var (
@@ -61,7 +51,7 @@ func init() {
 	flag.BoolVar(&dryrun, "dry-run", false, "Show what would happen (default false)")
 	flag.StringVar(&repo, "repo", "", "Use a different repository (default \"from file\")")
 	flag.StringVar(&token, "token", "", "Use a different GithHub token [overrides GITHUB_TOKEN environment variable]")
-	flag.StringVar(&endpoint, "endpoint", api, "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
+	flag.StringVar(&endpoint, "endpoint", "", "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
 
 	flag.BoolVar(&help, "help", false, "Show help")
 	flag.BoolVar(&versionFlag, "version", false, "Show version")
@@ -83,15 +73,15 @@ func main() {
 	}
 
 	if versionFlag {
-		fmt.Fprintf(os.Stdout, "version %s\n", getVersion())
+		fmt.Fprintf(os.Stdout, "version %s\n", utils.GetVersion())
 		os.Exit(0)
 	}
 
 	file := flag.Args()[0]
 
-	endpoint := getEndpoint(endpoint)
+	endpoint := utils.GetEndpoint(endpoint)
 
-	token, err := getToken(token)
+	token, err := utils.GetToken(token)
 	if err != nil {
 		fatal(err)
 	}
@@ -103,7 +93,7 @@ func main() {
 
 	client := github.NewClient(tc)
 
-	err = setEndpoint(client, endpoint)
+	err = utils.SetEndpoint(client, endpoint)
 	if err != nil {
 		fatal(err)
 	}
@@ -129,4 +119,9 @@ func main() {
 	}
 
 	os.Exit(0)
+}
+
+func fatal(e error) {
+	glog.V(0).Info(e)
+	os.Exit(1)
 }
