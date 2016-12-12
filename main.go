@@ -31,20 +31,6 @@ var (
 	versionFlag bool
 )
 
-func usage() {
-	fmt.Fprintf(os.Stderr, "usage: %s [<options>] <file.yaml>\n", os.Args[0])
-	fmt.Fprintln(os.Stderr, "")
-	fmt.Fprintln(os.Stderr, "Manage labels on GitHub as code")
-	fmt.Fprintln(os.Stderr, "")
-	fmt.Fprintln(os.Stderr, "Available options:")
-
-	flag.PrintDefaults()
-
-	fmt.Fprintln(os.Stderr, "")
-
-	os.Exit(1)
-}
-
 func init() {
 	//flag.BoolVar(&scan, "scan", false, "Scan the repo for label information")
 
