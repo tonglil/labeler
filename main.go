@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
 	"github.com/tonglil/labeler/cmd"
@@ -25,10 +24,6 @@ var (
 	token    string
 	endpoint string
 	repo     string
-
-	// App info
-	help        bool
-	versionFlag bool
 )
 
 func init() {
@@ -39,11 +34,6 @@ func init() {
 	//flag.StringVar(&token, "token", "", "Use a different GithHub token [overrides GITHUB_TOKEN environment variable]")
 	//flag.StringVar(&endpoint, "endpoint", "", "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
 
-	//flag.BoolVar(&help, "help", false, "Show help")
-	//flag.BoolVar(&versionFlag, "version", false, "Show version")
-
-	//flag.Usage = usage
-
 	//flag.Set("logtostderr", "true")
 }
 
@@ -53,15 +43,6 @@ func main() {
 	return
 
 	flag.Parse()
-
-	if help || len(flag.Args()) != 1 {
-		flag.Usage()
-	}
-
-	if versionFlag {
-		fmt.Fprintf(os.Stdout, "version %s\n", utils.GetVersion())
-		os.Exit(0)
-	}
 
 	file := flag.Args()[0]
 
