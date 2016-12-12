@@ -10,7 +10,9 @@ import (
 )
 
 // Run executes the write actions against the repo.
-func Run(client *github.Client, file string, opt *types.Options) error {
+func Run(client *github.Client, opt *types.Options) error {
+	file := opt.Filename
+
 	lf, err := config.ReadFile(file)
 	if err != nil {
 		return err

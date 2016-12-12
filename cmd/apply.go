@@ -40,7 +40,7 @@ quickly create a Cobra application.
 			glog.V(0).Infof("Dry run enabled - changes will not be applied")
 		}
 
-		return writer.Run(client, file, opt)
+		return writer.Run(client, opt)
 	},
 }
 
