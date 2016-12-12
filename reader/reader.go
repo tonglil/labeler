@@ -13,7 +13,9 @@ import (
 )
 
 // Run executes the write actions against the repo.
-func Run(client *github.Client, file string, opt *types.Options) error {
+func Run(client *github.Client, opt *types.Options) error {
+	file := opt.Filename
+
 	// TODO:
 	// DryRun should cleanup if missing as well...
 	err := config.CreateIfMissing(file)
