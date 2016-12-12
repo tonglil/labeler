@@ -7,13 +7,6 @@ import (
 	"github.com/tonglil/labeler/utils"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-)
-
-const (
-	api = "https://api.github.com/"
-	//apiEnv   = "GITHUB_API"
-	//tokenEnv = "GITHUB_TOKEN"
 )
 
 var (
@@ -47,16 +40,17 @@ process/label system!
 
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
+func Execute() error {
 	if err := RootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(-1)
+		return err
 	}
 
 	if version {
 		fmt.Fprintf(os.Stdout, "version %s\n", utils.GetVersion())
 		os.Exit(0)
 	}
+
+	return nil
 }
 
 func init() {
@@ -69,24 +63,8 @@ func init() {
 
 	RootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "GitHub repository (default is read from the file)")
 	RootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
-	RootCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", api, "The GithHub API endpoint [overrides GITHUB_API]")
+	RootCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
 
 	// Local flags, only run when this action is called directly.
-	RootCmd.Flags().BoolVarP(&version, "version", "v", false, "Show version")
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	//if cfgFile != "" { // enable ability to specify config file via flag
-	//viper.SetConfigFile(cfgFile)
-	//}
-
-	//viper.SetConfigName(".cobra") // name of config file (without extension)
-	//viper.AddConfigPath("$HOME")  // adding home directory as first search path
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
+	RootCmd.Flags().BoolVarP(&version, "version", "V", false, "Show version")
 }

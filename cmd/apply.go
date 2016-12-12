@@ -3,32 +3,47 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"github.com/tonglil/labeler/types"
+	"github.com/tonglil/labeler/utils"
+	"github.com/tonglil/labeler/writer"
 )
 
 // applyCmd represents the apply command
 var applyCmd = &cobra.Command{
 	Use:   "apply",
 	Short: "Apply a YAML label definition file",
-	Long: `A longer description that spans multiple lines and likely contains examples
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("apply called")
+	Long: `
+A longer description that spans multiple lines and likely contains examples to
+quickly create a Cobra application.
+	`,
+	SilenceUsage: true,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) != 1 {
+			return fmt.Errorf("no file given")
+		}
+
+		file := args[0]
+		client, err := utils.GetClient(endpoint, token)
+		if err != nil {
+			return err
+		}
+
+		opt := &types.Options{
+			DryRun:   cmd.Flag("dryrun").Changed,
+			Repo:     cmd.Flag("repo").Value.String(),
+			Filename: file,
+		}
+
+		if opt.DryRun {
+			glog.V(0).Infof("Dry run enabled - changes will not be applied")
+		}
+
+		return writer.Run(client, file, opt)
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(applyCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// applyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// applyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }

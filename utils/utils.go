@@ -6,10 +6,12 @@ import (
 	"os"
 
 	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 )
 
 const (
-	api      = "https://api.github.com/"
+	// The default GitHub API url
+	Api      = "https://api.github.com/"
 	apiEnv   = "GITHUB_API"
 	tokenEnv = "GITHUB_TOKEN"
 )
@@ -19,7 +21,32 @@ var (
 	version string
 )
 
-func GetToken(t string) (string, error) {
+func GetClient(endpoint string, token string) (*github.Client, error) {
+	endpoint = getEndpoint(endpoint)
+
+	token, err := getToken(token)
+	if err != nil {
+		return nil, err
+	}
+
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{
+			AccessToken: token,
+		},
+	)
+	tc := oauth2.NewClient(oauth2.NoContext, ts)
+
+	client := github.NewClient(tc)
+
+	err = setEndpoint(client, endpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	return client, nil
+}
+
+func getToken(t string) (string, error) {
 	// If token is set, use that.
 	if t != "" {
 		return t, nil
@@ -35,9 +62,9 @@ func GetToken(t string) (string, error) {
 	return "", fmt.Errorf("missing environment variable %s", tokenEnv)
 }
 
-func GetEndpoint(e string) string {
+func getEndpoint(e string) string {
 	// If endpoint is different from the default, use that.
-	if e != api {
+	if e != Api {
 		return e
 	}
 
@@ -48,11 +75,11 @@ func GetEndpoint(e string) string {
 	}
 
 	// Otherwise use the default endpoint.
-	return api
+	return Api
 }
 
-func SetEndpoint(c *github.Client, e string) error {
-	if e != api {
+func setEndpoint(c *github.Client, e string) error {
+	if e != Api {
 		ep, err := url.Parse(e)
 		if err != nil {
 			return err

@@ -34,7 +34,8 @@ func init() {
 	//flag.StringVar(&token, "token", "", "Use a different GithHub token [overrides GITHUB_TOKEN environment variable]")
 	//flag.StringVar(&endpoint, "endpoint", "", "Use a different GithHub API endpoint [overrides GITHUB_API environment variable]")
 
-	//flag.Set("logtostderr", "true")
+	flag.Set("logtostderr", "true")
+	flag.Set("v", "9")
 }
 
 func main() {
