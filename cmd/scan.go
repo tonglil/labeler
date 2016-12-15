@@ -12,7 +12,7 @@ import (
 
 // scanCmd represents the scan command
 var scanCmd = &cobra.Command{
-	Use:   "scan",
+	Use:   "scan file",
 	Short: "A brief description of your command",
 	Long: `
 A longer description that spans multiple lines and likely contains examples

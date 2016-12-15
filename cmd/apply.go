@@ -12,7 +12,7 @@ import (
 
 // applyCmd represents the apply command
 var applyCmd = &cobra.Command{
-	Use:   "apply",
+	Use:   "apply file",
 	Short: "Apply a YAML label definition file",
 	Long: `
 A longer description that spans multiple lines and likely contains examples to
