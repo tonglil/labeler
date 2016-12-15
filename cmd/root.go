@@ -31,26 +31,20 @@ With the ability to scan and apply label changes, repository maintainers can now
 empower contributors to submit PRs and improve the project management
 process/label system!
 	`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.HelpFunc()
+		if version {
+			fmt.Fprintf(os.Stdout, "version %s\n", utils.GetVersion())
+			os.Exit(0)
+		}
+
+		cmd.Help()
 	},
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() error {
-	if err := RootCmd.Execute(); err != nil {
-		return err
-	}
-
-	if version {
-		fmt.Fprintf(os.Stdout, "version %s\n", utils.GetVersion())
-		os.Exit(0)
-	}
-
-	return nil
+	return RootCmd.Execute()
 }
 
 func init() {

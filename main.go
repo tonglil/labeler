@@ -14,7 +14,7 @@ func init() {
 }
 
 func main() {
-	flag.Parse()
+	//flag.Parse()
 
 	if err := cmd.Execute(); err != nil {
 		glog.V(0).Info(err)
