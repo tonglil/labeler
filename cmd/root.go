@@ -60,7 +60,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
 	RootCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
 
-	RootCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The level of logging to display")
+	RootCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display")
 
 	// Local flags, only run when this action is called directly.
 	RootCmd.Flags().BoolVarP(&version, "version", "v", false, "Show version")

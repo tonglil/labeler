@@ -13,7 +13,6 @@ func init() {
 
 func main() {
 	if err := cmd.Execute(); err != nil {
-		logs.V(0).Infoln(err)
 		os.Exit(1)
 	}
 
