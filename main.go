@@ -1,23 +1,19 @@
 package main
 
 import (
-	"flag"
 	"os"
 
-	"github.com/golang/glog"
 	"github.com/tonglil/labeler/cmd"
+	"github.com/tonglil/labeler/logs"
 )
 
 func init() {
-	flag.Set("logtostderr", "true")
-	flag.Set("v", "9")
+	logs.Output = os.Stdout
 }
 
 func main() {
-	//flag.Parse()
-
 	if err := cmd.Execute(); err != nil {
-		glog.V(0).Info(err)
+		logs.V(0).Infoln(err)
 		os.Exit(1)
 	}
 

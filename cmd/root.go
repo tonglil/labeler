@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tonglil/labeler/logs"
 	"github.com/tonglil/labeler/utils"
 
 	"github.com/spf13/cobra"
@@ -59,6 +60,8 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
 	RootCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
 
+	RootCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The level of logging to display")
+
 	// Local flags, only run when this action is called directly.
-	RootCmd.Flags().BoolVarP(&version, "version", "V", false, "Show version")
+	RootCmd.Flags().BoolVarP(&version, "version", "v", false, "Show version")
 }
