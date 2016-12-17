@@ -6,26 +6,25 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/tonglil/labeler/logs"
 	"github.com/tonglil/labeler/types"
-
-	"github.com/golang/glog"
 	yaml "gopkg.in/yaml.v2"
 )
 
 func CreateIfMissing(file string) error {
 	path, err := filepath.Abs(file)
 	if err != nil {
-		glog.V(0).Infof("Failed to find %s", file)
+		logs.V(0).Infof("Failed to find %s", file)
 		return err
 	}
 
 	_, err = os.Stat(path)
 	if os.IsNotExist(err) {
-		glog.V(0).Infof("Creating file %s", path)
+		logs.V(0).Infof("Creating file %s", path)
 
 		f, err := os.Create(file)
 		if err != nil {
-			glog.V(0).Infof("Failed to create file %s", file)
+			logs.V(0).Infof("Failed to create file %s", file)
 			return err
 		}
 		f.Close()
@@ -38,30 +37,30 @@ func CreateIfMissing(file string) error {
 func ReadFile(file string) (*types.LabelFile, error) {
 	path, err := filepath.Abs(file)
 	if err != nil {
-		glog.V(0).Infof("Failed to find %s", file)
+		logs.V(0).Infof("Failed to find %s", file)
 		return nil, err
 	}
 
 	f, err := os.Open(path)
 	if err != nil {
-		glog.V(0).Infof("Failed to open %s", path)
+		logs.V(0).Infof("Failed to open %s", path)
 		return nil, err
 	}
 	defer f.Close()
 
 	data, err := ioutil.ReadAll(f)
 	if err != nil {
-		glog.V(0).Infof("Failed to read %s", path)
+		logs.V(0).Infof("Failed to read %s", path)
 		return nil, err
 	}
 
-	glog.V(4).Infof("Read file %s", path)
+	logs.V(4).Infof("Read file %s", path)
 
 	lf := types.LabelFile{}
 
 	err = yaml.Unmarshal(data, &lf)
 	if err != nil {
-		glog.V(0).Infof("Failed to unmarshal %s", path)
+		logs.V(0).Infof("Failed to unmarshal %s", path)
 		return nil, err
 	}
 
@@ -72,23 +71,23 @@ func ReadFile(file string) (*types.LabelFile, error) {
 func WriteFile(file string, lf *types.LabelFile) error {
 	path, err := filepath.Abs(file)
 	if err != nil {
-		glog.V(0).Infof("Failed to find %s", file)
+		logs.V(0).Infof("Failed to find %s", file)
 		return err
 	}
 
 	data, err := yaml.Marshal(lf)
 	if err != nil {
-		glog.V(0).Infof("Failed to marshal %T", lf)
+		logs.V(0).Infof("Failed to marshal %T", lf)
 		return err
 	}
 
 	err = ioutil.WriteFile(path, data, 0644)
 	if err != nil {
-		glog.V(0).Infof("Failed to write %s", path)
+		logs.V(0).Infof("Failed to write %s", path)
 		return err
 	}
 
-	glog.V(4).Infof("Wrote file %s", path)
+	logs.V(4).Infof("Wrote file %s", path)
 
 	return nil
 }

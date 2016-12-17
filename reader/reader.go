@@ -3,12 +3,11 @@ package reader
 import (
 	"encoding/json"
 
+	"github.com/google/go-github/github"
 	"github.com/tonglil/labeler/config"
+	"github.com/tonglil/labeler/logs"
 	"github.com/tonglil/labeler/remote"
 	"github.com/tonglil/labeler/types"
-
-	"github.com/golang/glog"
-	"github.com/google/go-github/github"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -30,13 +29,13 @@ func Run(client *github.Client, opt *types.Options) error {
 
 	opt.Repo, err = config.GetRepo(opt, lf)
 	if err != nil {
-		glog.V(0).Infof("No repo provided")
+		logs.V(0).Infof("No repo provided")
 		return err
 	}
 
 	err = opt.ValidateRepo()
 	if err != nil {
-		glog.V(0).Infof("Failed to parse repo format: owner/name")
+		logs.V(0).Infof("Failed to parse repo format: owner/name")
 		return err
 	}
 
@@ -50,7 +49,7 @@ func Run(client *github.Client, opt *types.Options) error {
 
 	x, err := json.Marshal(labelsRemote)
 	if err != nil {
-		glog.V(0).Infof("Failed to marshal labels from remote format")
+		logs.V(0).Infof("Failed to marshal labels from remote format")
 		return err
 	}
 
@@ -60,12 +59,12 @@ func Run(client *github.Client, opt *types.Options) error {
 	// Can we directly unmarshal from labelsRemote?
 	err = yaml.Unmarshal(x, &labels)
 	if err != nil {
-		glog.V(0).Infof("Failed to unmarshal labels to local format")
+		logs.V(0).Infof("Failed to unmarshal labels to local format")
 		return err
 	}
 
 	for _, l := range labels {
-		glog.V(4).Infof("Fetched '%s' with color '%s'\n", l.Name, l.Color)
+		logs.V(4).Infof("Fetched '%s' with color '%s'", l.Name, l.Color)
 	}
 
 	lf = &types.LabelFile{
@@ -80,7 +79,7 @@ func Run(client *github.Client, opt *types.Options) error {
 		}
 	}
 
-	glog.V(4).Infof("Processed %d labels in total", total)
+	logs.V(4).Infof("Processed %d labels in total", total)
 
 	return nil
 }

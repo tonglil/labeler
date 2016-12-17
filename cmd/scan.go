@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"github.com/tonglil/labeler/logs"
 	"github.com/tonglil/labeler/reader"
 	"github.com/tonglil/labeler/types"
 	"github.com/tonglil/labeler/utils"
@@ -41,7 +41,7 @@ to quickly create a Cobra application.
 		}
 
 		if opt.DryRun {
-			glog.V(0).Infof("Dry run enabled - changes will not be applied")
+			logs.V(0).Infof("Dry run enabled - changes will not be applied")
 		}
 
 		return reader.Run(client, opt)

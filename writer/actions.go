@@ -1,10 +1,9 @@
 package writer
 
 import (
-	"github.com/tonglil/labeler/types"
-
-	"github.com/golang/glog"
 	"github.com/google/go-github/github"
+	"github.com/tonglil/labeler/logs"
+	"github.com/tonglil/labeler/types"
 )
 
 func Rename(client *github.Client, opt *types.Options, local []*types.Label, remote []*github.Label) ([]*types.Label, int, error) {
@@ -14,12 +13,12 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 	for _, l := range local {
 		if l.From != "" {
 			if _, ok := remoteHas(l.Name, remote); ok {
-				glog.Infof("Skipped renaming '%s' to '%s', label already exists - please update your config file '%s'", l.From, l.Name, opt.Filename)
+				logs.V(0).Infof("Skipped renaming '%s' to '%s', label already exists - please update your config file '%s'", l.From, l.Name, opt.Filename)
 				continue
 			}
 
 			if r, ok := remoteHas(l.From, remote); ok {
-				glog.V(4).Infof("Renaming '%s' to '%s' with color '%s' to '%s'\n", *r.Name, l.Name, *r.Color, l.Color)
+				logs.V(4).Infof("Renaming '%s' to '%s' with color '%s' to '%s'", *r.Name, l.Name, *r.Color, l.Color)
 
 				if opt.DryRun {
 					count++
@@ -31,11 +30,11 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 					Color: &l.Color,
 				})
 				if err != nil {
-					glog.V(0).Infof("Failed to rename label '%s' to '%s' with color '%s' to '%s'", *r.Name, l.Name, *r.Color, l.Color)
+					logs.V(0).Infof("Failed to rename label '%s' to '%s' with color '%s' to '%s'", *r.Name, l.Name, *r.Color, l.Color)
 					return nil, count, err
 				}
-				glog.V(6).Infof("Response: %s", resp)
-				glog.V(4).Infof("Renamed label '%s'", label)
+				logs.V(6).Infof("Response: %s", resp)
+				logs.V(4).Infof("Renamed label '%s'", label)
 
 				count++
 				continue
@@ -54,7 +53,7 @@ func Update(client *github.Client, opt *types.Options, local []*types.Label, rem
 
 	for _, l := range local {
 		if r, ok := remoteHas(l.Name, remote); ok && l.Color != *r.Color {
-			glog.V(4).Infof("Updating '%s' with color '%s' to '%s'\n", l.Name, *r.Color, l.Color)
+			logs.V(4).Infof("Updating '%s' with color '%s' to '%s'", l.Name, *r.Color, l.Color)
 
 			if opt.DryRun {
 				count++
@@ -65,11 +64,11 @@ func Update(client *github.Client, opt *types.Options, local []*types.Label, rem
 				Color: &l.Color,
 			})
 			if err != nil {
-				glog.V(0).Infof("Failed to update label '%s' with color '%s' to '%s'", l.Name, *r.Color, l.Name)
+				logs.V(0).Infof("Failed to update label '%s' with color '%s' to '%s'", l.Name, *r.Color, l.Name)
 				return nil, count, err
 			}
-			glog.V(6).Infof("Response: %s", resp)
-			glog.V(4).Infof("Updated label '%s'", label)
+			logs.V(6).Infof("Response: %s", resp)
+			logs.V(4).Infof("Updated label '%s'", label)
 
 			count++
 			continue
@@ -87,7 +86,7 @@ func Create(client *github.Client, opt *types.Options, local []*types.Label, rem
 
 	for _, l := range local {
 		if _, ok := remoteHas(l.Name, remote); !ok {
-			glog.V(4).Infof("Creating '%s' with color '%s'\n", l.Name, l.Color)
+			logs.V(4).Infof("Creating '%s' with color '%s'", l.Name, l.Color)
 
 			if opt.DryRun {
 				count++
@@ -99,11 +98,11 @@ func Create(client *github.Client, opt *types.Options, local []*types.Label, rem
 				Color: &l.Color,
 			})
 			if err != nil {
-				glog.V(0).Infof("Failed to create label '%s' with color '%s'", l.Name, l.Color)
+				logs.V(0).Infof("Failed to create label '%s' with color '%s'", l.Name, l.Color)
 				return nil, count, err
 			}
-			glog.V(6).Infof("Response: %s", resp)
-			glog.V(4).Infof("Created label '%s'", label)
+			logs.V(6).Infof("Response: %s", resp)
+			logs.V(4).Infof("Created label '%s'", label)
 
 			count++
 			continue
@@ -123,7 +122,7 @@ func Delete(client *github.Client, opt *types.Options, local []*types.Label, rem
 			continue
 		}
 
-		glog.V(4).Infof("Deleting '%s' with color '%s'\n", *l.Name, *l.Color)
+		logs.V(4).Infof("Deleting '%s' with color '%s'", *l.Name, *l.Color)
 
 		if opt.DryRun {
 			count++
@@ -132,11 +131,11 @@ func Delete(client *github.Client, opt *types.Options, local []*types.Label, rem
 
 		resp, err := client.Issues.DeleteLabel(opt.RepoOwner(), opt.RepoName(), *l.Name)
 		if err != nil {
-			glog.V(0).Infof("Failed to delete label '%s' with color '%s'", *l.Name, *l.Color)
+			logs.V(0).Infof("Failed to delete label '%s' with color '%s'", *l.Name, *l.Color)
 			return count, err
 		}
-		glog.V(6).Infof("Response: %s", resp)
-		glog.V(4).Infof("Deleted label '%s'", l)
+		logs.V(6).Infof("Response: %s", resp)
+		logs.V(4).Infof("Deleted label '%s'", l)
 
 		count++
 	}

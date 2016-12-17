@@ -1,12 +1,11 @@
 package writer
 
 import (
+	"github.com/google/go-github/github"
 	"github.com/tonglil/labeler/config"
+	"github.com/tonglil/labeler/logs"
 	"github.com/tonglil/labeler/remote"
 	"github.com/tonglil/labeler/types"
-
-	"github.com/golang/glog"
-	"github.com/google/go-github/github"
 )
 
 // Run executes the write actions against the repo.
@@ -20,13 +19,13 @@ func Run(client *github.Client, opt *types.Options) error {
 
 	opt.Repo, err = config.GetRepo(opt, lf)
 	if err != nil {
-		glog.V(0).Infof("No repo provided")
+		logs.V(0).Infof("No repo provided")
 		return err
 	}
 
 	err = opt.ValidateRepo()
 	if err != nil {
-		glog.V(0).Infof("Failed to parse repo format: owner/name")
+		logs.V(0).Infof("Failed to parse repo format: owner/name")
 		return err
 	}
 
@@ -44,7 +43,7 @@ func Run(client *github.Client, opt *types.Options) error {
 		return err
 	}
 
-	glog.V(6).Infof("Finished renaming %d labels", n)
+	logs.V(6).Infof("Finished renaming %d labels", n)
 	total += n
 
 	// Update
@@ -53,7 +52,7 @@ func Run(client *github.Client, opt *types.Options) error {
 		return err
 	}
 
-	glog.V(6).Infof("Finished updating %d labels", n)
+	logs.V(6).Infof("Finished updating %d labels", n)
 	total += n
 
 	// Create
@@ -62,7 +61,7 @@ func Run(client *github.Client, opt *types.Options) error {
 		return err
 	}
 
-	glog.V(6).Infof("Finished creating %d labels", n)
+	logs.V(6).Infof("Finished creating %d labels", n)
 	total += n
 
 	// Delete
@@ -71,10 +70,10 @@ func Run(client *github.Client, opt *types.Options) error {
 		return err
 	}
 
-	glog.V(6).Infof("Finished deleting %d labels", n)
+	logs.V(6).Infof("Finished deleting %d labels", n)
 	total += n
 
-	glog.V(4).Infof("Processed %d labels in total", total)
+	logs.V(4).Infof("Processed %d labels in total", total)
 
 	return nil
 }
