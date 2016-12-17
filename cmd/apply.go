@@ -15,13 +15,13 @@ var applyCmd = &cobra.Command{
 	Use:   "apply file",
 	Short: "Apply a YAML label definition file",
 	Long: `
-A longer description that spans multiple lines and likely contains examples to
-quickly create a Cobra application.
+This command will apply the labels in "labels.yaml" to the "docker/docker"
+repository without actually changing anything, just show what would be done:
+  labeler apply labels.yaml -d -r docker/docker
 	`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
-			fmt.Println("")
 			fmt.Println(cmd.UsageString())
 			return fmt.Errorf("no file given")
 		}

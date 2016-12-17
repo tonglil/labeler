@@ -28,7 +28,7 @@ var RootCmd = &cobra.Command{
 	Long: `
 Labeler is a CLI application for managing labels on Github as code.
 
-With the ability to scan and apply label changes, repository maintainers can now
+With the ability to scan and apply label changes, repository maintainers can
 empower contributors to submit PRs and improve the project management
 process/label system!
 	`,
