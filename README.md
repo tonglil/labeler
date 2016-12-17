@@ -44,14 +44,39 @@ go get github.com/tonglil/labeler
 
 ## Usage
 
-Read a [GitHub token][tokens] from the environment and apply the label configuration:
+First, set a [GitHub token][tokens] in the environment (optional, the token can be set as an cli argument as well).
 ```
 export GITHUB_TOKEN=xxx
-labeler -v 5 labels.yaml
 ```
 
 > - The token for public repos need the `public_repo` scope.
 > - The token for private repos need the `repo` scope.
+
+[tokens]: https://github.com/settings/tokens
+
+### Scanning labels
+
+To scan existing labels from a repository and save it to a file:
+```
+labeler -v 5 -scan -repo owner/name labels.yaml
+```
+
+Which when run against a "new" repo created on GitHub, will:
+- Fetch `bug` with color `fc2929`
+- Fetch `duplicate` with color `cccccc`
+- Fetch `enhancement` with color `84b6eb`
+- Fetch `invalid` with color `e6e6e6`
+- Fetch `question` with color `cc317c`
+- Fetch `wontfix` with color `ffffff`
+
+And write them into `labels.yaml`, creating the file if it exists, otherwise overwriting its contents.
+
+### Applying labels
+
+To apply labels to a repository:
+```
+labeler -v 5 labels.yaml
+```
 
 Where `labels.yaml` is like:
 ```yml
@@ -80,8 +105,6 @@ Which when run against a "new" repo created on GitHub, will:
 When run again, rename changes will not be run because the label already exists.
 In this manner, this tool is idempotent.
 
-[tokens]: https://github.com/settings/tokens
-
 ## Usage options
 
 ```
@@ -89,6 +112,7 @@ usage: labeler [<options>] <file.yaml>
 ```
 
 Notable options:
+- `-scan` - scan a repo for label information into a file
 - `-dry-run` - show what would happen (default false)
 - `-v <0 to 9>` - log level for V logs (default 0)
 - `-endpoint <https://url/>` - use a different GithHub API endpoint [overrides GITHUB_API environment variable] (default "https://api.github.com/")
@@ -106,7 +130,6 @@ labeler -h
 [`glide`][glide] is used to manage vendor dependencies.
 
 Roadmap:
-- Scan existing labels from a repository and save it to a file.
 - Refactor cli (https://github.com/tonglil/labeler/issues/5).
 - Plan -> execute (aka always dry-run first).
 - Automatically update file after renaming operations are complete.
