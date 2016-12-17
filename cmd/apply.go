@@ -21,6 +21,8 @@ quickly create a Cobra application.
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
+			fmt.Println("")
+			fmt.Println(cmd.UsageString())
 			return fmt.Errorf("no file given")
 		}
 
