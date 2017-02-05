@@ -140,7 +140,6 @@ Use "labeler [command] --help" for more information about a command.
 [`glide`][glide] is used to manage vendor dependencies.
 
 Roadmap:
-- Refactor cli (https://github.com/tonglil/labeler/issues/5).
 - Plan -> execute (aka always dry-run first).
 - Automatically update file after renaming operations are complete.
 - Organizational support (apply/only-add one config to all repos in an organization).
