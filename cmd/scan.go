@@ -50,4 +50,12 @@ Example:
 
 func init() {
 	RootCmd.AddCommand(scanCmd)
+
+	scanCmd.PersistentFlags().BoolVarP(&dryrun, "dryrun", "d", false, "Show what would happen")
+
+	scanCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "GitHub repository (default is read from the file)")
+	scanCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
+	scanCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
+
+	scanCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display")
 }

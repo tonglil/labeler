@@ -4,18 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tonglil/labeler/logs"
-	"github.com/tonglil/labeler/utils"
-
 	"github.com/spf13/cobra"
-)
-
-var (
-	// Configuration options
-	dryrun   bool
-	token    string
-	endpoint string
-	repo     string
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -40,16 +29,4 @@ func Execute() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
-}
-
-// Define your flags and configuration settings.
-func init() {
-	// Persistent flags, global for the application.
-	RootCmd.PersistentFlags().BoolVarP(&dryrun, "dryrun", "d", false, "Show what would happen")
-
-	RootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "GitHub repository (default is read from the file)")
-	RootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
-	RootCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
-
-	RootCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display")
 }
