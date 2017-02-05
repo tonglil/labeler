@@ -14,11 +14,13 @@ import (
 var applyCmd = &cobra.Command{
 	Use:   "apply file",
 	Short: "Apply a YAML label definition file",
-	Long: `
-This command will apply the labels in "labels.yaml" to the "docker/docker"
-repository without actually changing anything, just show what would be done:
-  labeler apply labels.yaml -d -r docker/docker
-	`,
+	Long: `Apply the labels in a file
+
+Example:
+  $ labeler apply labels.yaml -r docker/docker -l 5 -d
+
+  Apply "labels.yaml" to the "docker/docker" repository without actually
+  changing anything, logging what would happen.`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
