@@ -1,5 +1,5 @@
-hash: 1f488ad49df3bf3a2969d70c7232c25c21fb6ea53eaccc9adc5b0b0122739aca
-updated: 2017-02-05T04:15:28.994729723-05:00
+hash: c3edc8099d615c5d4d77bde83cc38a06ddd6ca921e3ef13e0a2b248ec2f9b8dd
+updated: 2017-02-05T04:29:31.095892149-05:00
 imports:
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
@@ -21,6 +21,8 @@ imports:
   version: 35136c09d8da66b901337c6e86fd8e88a1a255bd
 - name: github.com/spf13/pflag
   version: 9ff6c6923cfffbcd502984b8e0c80539a94968b7
+- name: github.com/tonglil/versioning
+  version: 8b2a4334bd1dd29ff3565492337f9292c68cd290
 - name: golang.org/x/net
   version: 41bba8d80bbfab43231ffdf4c210037baae5f6a3
   subpackages:
