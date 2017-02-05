@@ -6,3 +6,10 @@ import:
   - github
 - package: golang.org/x/oauth2
 - package: gopkg.in/yaml.v2
+- package: github.com/google/go-querystring
+  subpackages:
+  - query
+- package: github.com/spf13/cobra
+- package: golang.org/x/net
+  subpackages:
+  - context
