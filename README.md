@@ -59,7 +59,7 @@ export GITHUB_TOKEN=xxx
 
 To scan existing labels from a repository and save it to a file:
 ```
-labeler -v 5 -scan -repo owner/name labels.yaml
+labeler scan --repo owner/name labels.yaml
 ```
 
 Which when run against a "new" repo created on GitHub, will:
@@ -76,7 +76,7 @@ And write them into `labels.yaml`, creating the file if it exists, otherwise ove
 
 To apply labels to a repository:
 ```
-labeler -v 5 labels.yaml
+labeler apply --dryrun labels.yaml
 ```
 
 Where `labels.yaml` is like:
