@@ -37,7 +37,7 @@ Get binaries for OS X / Linux / Windows from the latest [release].
 Or use `go get`:
 
 ```
-go get github.com/tonglil/labeler
+go get -u github.com/tonglil/labeler
 ```
 
 [release]: https://github.com/tonglil/labeler/releases
@@ -45,6 +45,7 @@ go get github.com/tonglil/labeler
 ## Usage
 
 First, set a [GitHub token][tokens] in the environment (optional, the token can be set as an cli argument as well).
+
 ```
 export GITHUB_TOKEN=xxx
 ```
@@ -58,7 +59,7 @@ export GITHUB_TOKEN=xxx
 
 To scan existing labels from a repository and save it to a file:
 ```
-labeler -v 5 -scan -repo owner/name labels.yaml
+labeler scan labels.yaml --repo owner/name
 ```
 
 Which when run against a "new" repo created on GitHub, will:
@@ -75,7 +76,7 @@ And write them into `labels.yaml`, creating the file if it exists, otherwise ove
 
 To apply labels to a repository:
 ```
-labeler -v 5 labels.yaml
+labeler apply labels.yaml --dryrun
 ```
 
 Where `labels.yaml` is like:
@@ -108,21 +109,29 @@ In this manner, this tool is idempotent.
 ## Usage options
 
 ```
-usage: labeler [<options>] <file.yaml>
+$ labeler
+Labeler is a CLI application for managing labels on Github as code.
+
+With the ability to scan and apply label changes, repository maintainers can
+empower contributors to submit PRs and improve the project management
+process/label system!
+
+Usage:
+  labeler [command]
+
+Available Commands:
+  apply       Apply a YAML label definition file
+  completion  Output shell completion code for tab completion
+  scan        Save a repository's labels into a YAML definition file
+  version     Print the version information
+
+Use "labeler [command] --help" for more information about a command.
 ```
 
-Notable options:
-- `-scan` - scan a repo for label information into a file
-- `-dry-run` - show what would happen (default false)
-- `-v <0 to 9>` - log level for V logs (default 0)
-- `-endpoint <https://url/>` - use a different GithHub API endpoint [overrides GITHUB_API environment variable] (default "https://api.github.com/")
-- `-repo <owner/name>` - use a different repository (default "from file")
-- `-token <string>` - use a different GithHub token [overrides GITHUB_TOKEN environment variable]
-- `-version` - show version
+## Tab completion
 
-Get all options by running:
-```
-labeler -h
+```bash
+source <(labeler completion)
 ```
 
 ## Development
@@ -130,7 +139,6 @@ labeler -h
 [`glide`][glide] is used to manage vendor dependencies.
 
 Roadmap:
-- Refactor cli (https://github.com/tonglil/labeler/issues/5).
 - Plan -> execute (aka always dry-run first).
 - Automatically update file after renaming operations are complete.
 - Organizational support (apply/only-add one config to all repos in an organization).
