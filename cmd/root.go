@@ -48,11 +48,8 @@ func Execute() error {
 	return RootCmd.Execute()
 }
 
+// Define your flags and configuration settings.
 func init() {
-	//cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-
 	// Persistent flags, global for the application.
 	RootCmd.PersistentFlags().BoolVarP(&dryrun, "dryrun", "d", false, "Show what would happen")
 
