@@ -37,7 +37,7 @@ Get binaries for OS X / Linux / Windows from the latest [release].
 Or use `go get`:
 
 ```
-go get github.com/tonglil/labeler
+go get -u github.com/tonglil/labeler
 ```
 
 [release]: https://github.com/tonglil/labeler/releases
@@ -59,7 +59,7 @@ export GITHUB_TOKEN=xxx
 
 To scan existing labels from a repository and save it to a file:
 ```
-labeler scan --repo owner/name labels.yaml
+labeler scan labels.yaml --repo owner/name
 ```
 
 Which when run against a "new" repo created on GitHub, will:
@@ -76,7 +76,7 @@ And write them into `labels.yaml`, creating the file if it exists, otherwise ove
 
 To apply labels to a repository:
 ```
-labeler apply --dryrun labels.yaml
+labeler apply labels.yaml --dryrun
 ```
 
 Where `labels.yaml` is like:
@@ -117,22 +117,21 @@ empower contributors to submit PRs and improve the project management
 process/label system!
 
 Usage:
-  labeler [flags]
   labeler [command]
 
 Available Commands:
   apply       Apply a YAML label definition file
+  completion  Output shell completion code for tab completion
   scan        Save a repository's labels into a YAML definition file
-
-Flags:
-  -a, --api string     The GithHub API endpoint [overrides GITHUB_API] (default "https://api.github.com/")
-  -d, --dryrun         Show what would happen
-  -l, --level int      The maximum level of logging to display (default 1)
-  -r, --repo string    GitHub repository (default is read from the file)
-  -t, --token string   The GithHub token [overrides GITHUB_TOKEN]
-  -v, --version        Show version
+  version     Print the version information
 
 Use "labeler [command] --help" for more information about a command.
+```
+
+## Tab completion
+
+```bash
+source <(labeler completion)
 ```
 
 ## Development
