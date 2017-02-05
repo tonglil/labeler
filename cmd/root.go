@@ -16,9 +16,6 @@ var (
 	token    string
 	endpoint string
 	repo     string
-
-	// App info
-	version bool
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -32,20 +29,17 @@ With the ability to scan and apply label changes, repository maintainers can
 empower contributors to submit PRs and improve the project management
 process/label system!
 	`,
-	Run: func(cmd *cobra.Command, args []string) {
-		if version {
-			fmt.Fprintf(os.Stdout, "version %s\n", utils.GetVersion())
-			os.Exit(0)
-		}
-
-		cmd.Help()
-	},
+	SilenceErrors: true,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() error {
-	return RootCmd.Execute()
+func Execute() {
+	err := RootCmd.Execute()
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
 }
 
 // Define your flags and configuration settings.
@@ -58,7 +52,4 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
 
 	RootCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display")
-
-	// Local flags, only run when this action is called directly.
-	RootCmd.Flags().BoolVarP(&version, "version", "v", false, "Show version")
 }
