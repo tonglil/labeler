@@ -14,11 +14,13 @@ import (
 var scanCmd = &cobra.Command{
 	Use:   "scan file",
 	Short: "Save a repository's labels into a YAML definition file",
-	Long: `
-This command will scan the labels from the "docker/docker" repository into a
-file called "labels.yaml", while displaying debug level logging:
-  labeler scan labels.yaml -r docker/docker -l 5
-	`,
+	Long: `Save remote labels into a file
+
+Example:
+  $ labeler scan labels.yaml -r docker/docker -l 5
+
+  Scan the labels from the "docker/docker" repository into a
+  file called "labels.yaml", logging what happened.`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
@@ -48,4 +50,12 @@ file called "labels.yaml", while displaying debug level logging:
 
 func init() {
 	RootCmd.AddCommand(scanCmd)
+
+	scanCmd.PersistentFlags().BoolVarP(&dryrun, "dryrun", "d", false, "Show what would happen")
+
+	scanCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "GitHub repository (default is read from the file)")
+	scanCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
+	scanCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
+
+	scanCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display")
 }

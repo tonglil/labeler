@@ -5,16 +5,17 @@ import (
 
 	"github.com/tonglil/labeler/cmd"
 	"github.com/tonglil/labeler/logs"
+	"github.com/tonglil/versioning"
 )
 
+var version string
+
 func init() {
+	versioning.Set(version)
+
 	logs.Output = os.Stdout
 }
 
 func main() {
-	if err := cmd.Execute(); err != nil {
-		os.Exit(1)
-	}
-
-	os.Exit(0)
+	cmd.Execute()
 }

@@ -14,11 +14,13 @@ import (
 var applyCmd = &cobra.Command{
 	Use:   "apply file",
 	Short: "Apply a YAML label definition file",
-	Long: `
-This command will apply the labels in "labels.yaml" to the "docker/docker"
-repository without actually changing anything, just show what would be done:
-  labeler apply labels.yaml -d -r docker/docker
-	`,
+	Long: `Apply the labels in a file
+
+Example:
+  $ labeler apply labels.yaml -r docker/docker -l 5 -d
+
+  Apply "labels.yaml" to the "docker/docker" repository without actually
+  changing anything, logging what would happen.`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
@@ -48,4 +50,12 @@ repository without actually changing anything, just show what would be done:
 
 func init() {
 	RootCmd.AddCommand(applyCmd)
+
+	applyCmd.PersistentFlags().BoolVarP(&dryrun, "dryrun", "d", false, "Show what would happen")
+
+	applyCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "GitHub repository (default is read from the file)")
+	applyCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
+	applyCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
+
+	applyCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display")
 }
