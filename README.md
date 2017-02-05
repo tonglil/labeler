@@ -45,6 +45,7 @@ go get github.com/tonglil/labeler
 ## Usage
 
 First, set a [GitHub token][tokens] in the environment (optional, the token can be set as an cli argument as well).
+
 ```
 export GITHUB_TOKEN=xxx
 ```
@@ -108,21 +109,30 @@ In this manner, this tool is idempotent.
 ## Usage options
 
 ```
-usage: labeler [<options>] <file.yaml>
-```
+$ labeler
+Labeler is a CLI application for managing labels on Github as code.
 
-Notable options:
-- `-scan` - scan a repo for label information into a file
-- `-dry-run` - show what would happen (default false)
-- `-v <0 to 9>` - log level for V logs (default 0)
-- `-endpoint <https://url/>` - use a different GithHub API endpoint [overrides GITHUB_API environment variable] (default "https://api.github.com/")
-- `-repo <owner/name>` - use a different repository (default "from file")
-- `-token <string>` - use a different GithHub token [overrides GITHUB_TOKEN environment variable]
-- `-version` - show version
+With the ability to scan and apply label changes, repository maintainers can
+empower contributors to submit PRs and improve the project management
+process/label system!
 
-Get all options by running:
-```
-labeler -h
+Usage:
+  labeler [flags]
+  labeler [command]
+
+Available Commands:
+  apply       Apply a YAML label definition file
+  scan        Save a repository's labels into a YAML definition file
+
+Flags:
+  -a, --api string     The GithHub API endpoint [overrides GITHUB_API] (default "https://api.github.com/")
+  -d, --dryrun         Show what would happen
+  -l, --level int      The maximum level of logging to display (default 1)
+  -r, --repo string    GitHub repository (default is read from the file)
+  -t, --token string   The GithHub token [overrides GITHUB_TOKEN]
+  -v, --version        Show version
+
+Use "labeler [command] --help" for more information about a command.
 ```
 
 ## Development
