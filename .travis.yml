@@ -1,3 +1,4 @@
+---
 sudo: false
 
 language: go
@@ -13,7 +14,7 @@ env:
 
 cache:
   directories:
-  - $GOPATH/src
+    - $GOPATH/src
 
 install: true
 
@@ -22,7 +23,7 @@ before_script:
   - gometalinter.v1 --install
 
 script:
-  - go test .
+  - go test $(go list ./... | grep -v /vendor/)
   - gometalinter.v1 --vendor ./... || true
 
 before_deploy:
