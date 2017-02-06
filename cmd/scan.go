@@ -14,10 +14,8 @@ import (
 var scanCmd = &cobra.Command{
 	Use:   "scan file",
 	Short: "Save a repository's labels into a YAML definition file",
-	Long: `Save remote labels into a file
-
-Example:
-  $ labeler scan labels.yaml -r docker/docker -l 5
+	Long:  `Save remote labels into a file`,
+	Example: `$ labeler scan labels.yaml -r docker/docker -l 5
 
   Scan the labels from the "docker/docker" repository into a
   file called "labels.yaml", logging what happened.`,
