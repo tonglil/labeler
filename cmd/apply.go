@@ -14,10 +14,8 @@ import (
 var applyCmd = &cobra.Command{
 	Use:   "apply file",
 	Short: "Apply a YAML label definition file",
-	Long: `Apply the labels in a file
-
-Example:
-  $ labeler apply labels.yaml -r docker/docker -l 5 -d
+	Long:  `Apply the labels in a file`,
+	Example: `$ labeler apply labels.yaml -r docker/docker -l 5 -d
 
   Apply "labels.yaml" to the "docker/docker" repository without actually
   changing anything, logging what would happen.`,
@@ -57,5 +55,5 @@ func init() {
 	applyCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "The GithHub token [overrides GITHUB_TOKEN]")
 	applyCmd.PersistentFlags().StringVarP(&endpoint, "api", "a", utils.Api, "The GithHub API endpoint [overrides GITHUB_API]")
 
-	applyCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display")
+	applyCmd.PersistentFlags().IntVarP(&logs.Threshold, "level", "l", 1, "The maximum level of logging to display, up to 9")
 }
