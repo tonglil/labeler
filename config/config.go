@@ -102,7 +102,11 @@ func WriteFile(file string, lf *types.LabelFile) error {
 		return err
 	}
 
-	f.Sync()
+	err = f.Sync()
+	if err != nil {
+		logs.V(0).Infof("Failed to save %s", path)
+		return err
+	}
 
 	logs.V(4).Infof("Wrote file %s", path)
 
