@@ -70,7 +70,7 @@ Which when run against a "new" repo created on GitHub, will:
 - Fetch `question` with color `cc317c`
 - Fetch `wontfix` with color `ffffff`
 
-And write them into `labels.yaml`, creating the file if it exists, otherwise overwriting its contents.
+And write them into `labels.yaml`, creating the file if it doesn't exist, otherwise overwriting its contents.
 
 ### Applying labels
 
