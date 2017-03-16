@@ -16,13 +16,11 @@ cache:
   directories:
     - $GOPATH/src
 
-# script:
-before_install:
-  - bin/apply
-
 install: true
 
 before_script:
+  - bin/apply  # script:
+  - exit 0
   - go get -u gopkg.in/alecthomas/gometalinter.v1
   - gometalinter.v1 --install
 
