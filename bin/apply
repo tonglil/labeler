@@ -35,14 +35,14 @@ if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ ${LABELS_BRANC
         go get -u github.com/github/hub
 
         {
-          echo -e "[ci] Trimmed labels.yaml\n\nAutomatically generated diff:\n\`\`\`"
+          echo -e "[ci] Trimmed labels.yaml\n\nAutomatically generated diff:\n\`\`\`diff"
           git diff HEAD^ -- labels.yaml
           echo "\`\`\`"
         } > PATCH.md
 
         cat PATCH.md
 
-        #hub pull-request -F PATCH.md -b "${TRAVIS_BRANCH}" -h "$branch"
+        hub pull-request -F PATCH.md -b "${TRAVIS_BRANCH}" -h "$branch"
       fi
     fi
   fi
