@@ -11,6 +11,7 @@ env:
     - CGO_ENABLED=0
     - VERSION=$TRAVIS_TAG
     - GIT_SHA=${TRAVIS_COMMIT:0:7}
+    - LABELS_TRIM=1
 
 cache:
   directories:
