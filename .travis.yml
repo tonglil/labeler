@@ -12,9 +12,9 @@ env:
     - VERSION=$TRAVIS_TAG
     - GIT_SHA=${TRAVIS_COMMIT:0:7}
 
-#cache:
-  #directories:
-    #- $GOPATH/src
+cache:
+  directories:
+    - $GOPATH/bin
 
 install: true
 
