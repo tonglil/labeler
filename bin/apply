@@ -6,5 +6,10 @@ if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ "auto-ci" ]]; 
   echo "condition passed"
   go get -u github.com/tonglil/labeler
 
-  labeler apply labels.yaml -l 5
+  [ -z "$GITHUB_TOKEN" ] && echo "Need to set GITHUB_TOKEN"
+
+  ls -la .
+  cat labels.yaml
+
+  labeler apply labels.yaml -l 9
 fi
