@@ -11,14 +11,17 @@ env:
     - CGO_ENABLED=0
     - VERSION=$TRAVIS_TAG
     - GIT_SHA=${TRAVIS_COMMIT:0:7}
+    - LABELS_TRIM=1
 
 cache:
   directories:
-    - $GOPATH/src
+    - $GOPATH/bin
 
 install: true
 
 before_script:
+  - bin/apply  # script:
+  - exit 0
   - go get -u gopkg.in/alecthomas/gometalinter.v1
   - gometalinter.v1 --install
 
@@ -34,6 +37,7 @@ deploy:
   script: bin/dist
   on:
     tags: true
+    branch: master
 
 notifications:
   email:
