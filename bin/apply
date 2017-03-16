@@ -8,10 +8,20 @@ if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ ${LABELS_BRANC
   labeler apply labels.yaml -l 9
 
   if [ "${LABELS_TRIM:-0}" -eq 1 ]; then
-    labeler trim labels.yaml -l 9
+    labeler trim labels.yaml
 
-    diff=$(git diff --name-only labels.yaml)
+    diff=$(git diff --name-only -- labels.yaml)
     if [ "$diff" == "labels.yaml" ]; then
+      changes=$(git diff -- labels.yaml)
+
+      openssl aes-256-cbc -K $encrypted_8ac6028fa38c_key -iv $encrypted_8ac6028fa38c_iv -in travis_labeler.enc -out travis_labeler -d
+      # https://docs.travis-ci.com/user/deployment/custom/
+      # Start the ssh agent
+      eval "$(ssh-agent -s)"
+      # This key should have push access
+      chmod 600 travis_labeler
+      ssh-add travis_labeler
+
       git config user.email "travis@ci"
       git config user.name "Travis CI"
 
@@ -28,10 +38,10 @@ if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ ${LABELS_BRANC
         -X POST \
         --data @- << EOF
 {
-  "title": "Amazing new feature",
-  "body": "Please pull this in!",
+  "title": "[ci] Trimmed labels.yaml",
+  "body": "Automated:\n```$changes```",
   "head": "$branch",
-  "base": "master"
+  "base": "${TRAVIS_BRANCH}"
 }
 EOF
     fi
