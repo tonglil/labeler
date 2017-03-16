@@ -17,12 +17,16 @@ cache:
   directories:
     - $GOPATH/bin
 
-before_install:
-  - openssl aes-256-cbc -K $encrypted_8ac6028fa38c_key -iv $encrypted_8ac6028fa38c_iv -in travis_labeler.enc -out travis_labeler -d
-
 install: true
 
 before_script:
+  - openssl aes-256-cbc -K $encrypted_8ac6028fa38c_key -iv $encrypted_8ac6028fa38c_iv -in travis_labeler.enc -out travis_labeler -d
+    # https://docs.travis-ci.com/user/deployment/custom/
+    # Start the ssh agent
+  - eval "$(ssh-agent -s)"
+    # This key should have push access
+  - chmod 600 travis_labeler
+  - ssh-add travis_labeler
   - bin/apply  # script:
   - exit 0
   - go get -u gopkg.in/alecthomas/gometalinter.v1
