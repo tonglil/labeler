@@ -6,6 +6,7 @@ if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ "auto-ci" ]]; 
   echo "condition passed"
   go get -u github.com/tonglil/labeler
 
+  pwd
   ls -la .
   cat labels.yaml
 
