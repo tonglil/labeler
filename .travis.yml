@@ -16,6 +16,10 @@ cache:
   directories:
     - $GOPATH/src
 
+# script:
+before_install:
+  - bin/apply
+
 install: true
 
 before_script:
