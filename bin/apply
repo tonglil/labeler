@@ -2,7 +2,7 @@
 set -euo pipefail
 set -x
 
-if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ ${LABELS_BRANCH:-^auto-ci} ]]; then
+if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ ${LABELS_BRANCH:-^labels-ci} ]]; then
   go get -u github.com/tonglil/labeler
 
   labeler apply labels.yaml -l 9
