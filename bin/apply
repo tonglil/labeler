@@ -3,14 +3,7 @@ set -euo pipefail
 set -x
 
 if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ "auto-ci" ]]; then
-  echo "condition passed"
   go get -u github.com/tonglil/labeler
-
-  git status
-  git rev-parse HEAD
-  pwd
-  ls -la .
-  cat labels.yaml
 
   labeler apply labels.yaml -l 9
 fi
