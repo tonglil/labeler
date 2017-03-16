@@ -12,6 +12,9 @@ if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ ${LABELS_BRANC
 
     diff=$(git diff --name-only labels.yaml)
     if [ "$diff" == "labels.yaml" ]; then
+      git config user.email "travis@ci"
+      git config user.name "Travis CI"
+
       branch="ci-${TRAVIS_BRANCH}-labels-cleanup-$(date +%Y-%m-%d-%H-%M-%S)"
       git checkout -b "$branch"
       git add labels.yaml
