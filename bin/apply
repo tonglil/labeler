@@ -32,8 +32,6 @@ if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" =~ ${LABELS_BRANC
       git push --set-upstream ci "$branch"
 
       if [ "${LABELS_PR:-0}" -eq 1 ]; then
-        go get -u github.com/github/hub
-
         cat <<EOF > PATCH.md
         [ci] Trimmed labels.yaml
 
@@ -49,6 +47,7 @@ EOF
 
         cat PATCH.md
 
+        #go get -u github.com/github/hub
         #hub pull-request -F PATCH.md -b "${TRAVIS_BRANCH}" -h "$branch"
       fi
     fi
