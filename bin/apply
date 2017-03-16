@@ -47,7 +47,7 @@ EOF
           #echo -e "https://github.com/tonglil/labeler"
         #} > PATCH.md
 
-        echo PATCH.md
+        cat PATCH.md
 
         #hub pull-request -F PATCH.md -b "${TRAVIS_BRANCH}" -h "$branch"
       fi
