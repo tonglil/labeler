@@ -1,5 +1,7 @@
 repo: tonglil/labeler
 labels:
+  - name: test
+    color: 000000
   - name: effort/xs
     color: d4c5f9
   - name: effort/s
