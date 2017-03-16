@@ -12,6 +12,7 @@ env:
     - VERSION=$TRAVIS_TAG
     - GIT_SHA=${TRAVIS_COMMIT:0:7}
     - LABELS_TRIM=1
+    - LABELS_DIFF=changes.patch
 
 cache:
   directories:
