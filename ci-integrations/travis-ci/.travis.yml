@@ -1,0 +1,10 @@
+---
+env:
+  global:
+    - secure: "xxx"
+    - LABELS_TRIM=1
+    - LABELS_PR=0
+
+script:
+  - openssl aes-256-cbc -K $encrypted_xxx_key -iv $encrypted_xxx_iv -in deploy_key.enc -out deploy_key -d
+  - apply.sh
