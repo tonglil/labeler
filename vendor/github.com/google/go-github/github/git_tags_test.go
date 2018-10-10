@@ -6,6 +6,7 @@
 package github
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -14,17 +15,16 @@ import (
 )
 
 func TestGitService_GetTag(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/repos/o/r/git/tags/s", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeader(t, r, "Accept", mediaTypeGitSigningPreview)
-
 		fmt.Fprint(w, `{"tag": "t"}`)
 	})
 
-	tag, _, err := client.Git.GetTag("o", "r", "s")
+	tag, _, err := client.Git.GetTag(context.Background(), "o", "r", "s")
 	if err != nil {
 		t.Errorf("Git.GetTag returned error: %v", err)
 	}
@@ -36,7 +36,7 @@ func TestGitService_GetTag(t *testing.T) {
 }
 
 func TestGitService_CreateTag(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	input := &createTagRequest{Tag: String("t"), Object: String("s")}
@@ -53,7 +53,7 @@ func TestGitService_CreateTag(t *testing.T) {
 		fmt.Fprint(w, `{"tag": "t"}`)
 	})
 
-	tag, _, err := client.Git.CreateTag("o", "r", &Tag{
+	tag, _, err := client.Git.CreateTag(context.Background(), "o", "r", &Tag{
 		Tag:    input.Tag,
 		Object: &GitObject{SHA: input.Object},
 	})

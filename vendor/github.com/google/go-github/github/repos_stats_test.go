@@ -6,6 +6,7 @@
 package github
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -14,7 +15,7 @@ import (
 )
 
 func TestRepositoriesService_ListContributorsStats(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/repos/o/r/stats/contributors", func(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +41,7 @@ func TestRepositoriesService_ListContributorsStats(t *testing.T) {
 `)
 	})
 
-	stats, _, err := client.Repositories.ListContributorsStats("o", "r")
+	stats, _, err := client.Repositories.ListContributorsStats(context.Background(), "o", "r")
 	if err != nil {
 		t.Errorf("RepositoriesService.ListContributorsStats returned error: %v", err)
 	}
@@ -48,12 +49,12 @@ func TestRepositoriesService_ListContributorsStats(t *testing.T) {
 	want := []*ContributorStats{
 		{
 			Author: &Contributor{
-				ID: Int(1),
+				ID: Int64(1),
 			},
 			Total: Int(135),
 			Weeks: []WeeklyStats{
 				{
-					Week:      &Timestamp{time.Date(2013, 05, 05, 00, 00, 00, 0, time.UTC).Local()},
+					Week:      &Timestamp{time.Date(2013, time.May, 05, 00, 00, 00, 0, time.UTC).Local()},
 					Additions: Int(6898),
 					Deletions: Int(77),
 					Commits:   Int(10),
@@ -68,7 +69,7 @@ func TestRepositoriesService_ListContributorsStats(t *testing.T) {
 }
 
 func TestRepositoriesService_ListCommitActivity(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/repos/o/r/stats/commit_activity", func(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +86,7 @@ func TestRepositoriesService_ListCommitActivity(t *testing.T) {
 `)
 	})
 
-	activity, _, err := client.Repositories.ListCommitActivity("o", "r")
+	activity, _, err := client.Repositories.ListCommitActivity(context.Background(), "o", "r")
 	if err != nil {
 		t.Errorf("RepositoriesService.ListCommitActivity returned error: %v", err)
 	}
@@ -94,7 +95,7 @@ func TestRepositoriesService_ListCommitActivity(t *testing.T) {
 		{
 			Days:  []int{0, 3, 26, 20, 39, 1, 0},
 			Total: Int(89),
-			Week:  &Timestamp{time.Date(2012, 05, 06, 05, 00, 00, 0, time.UTC).Local()},
+			Week:  &Timestamp{time.Date(2012, time.May, 06, 05, 00, 00, 0, time.UTC).Local()},
 		},
 	}
 
@@ -104,7 +105,7 @@ func TestRepositoriesService_ListCommitActivity(t *testing.T) {
 }
 
 func TestRepositoriesService_ListCodeFrequency(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/repos/o/r/stats/code_frequency", func(w http.ResponseWriter, r *http.Request) {
@@ -113,13 +114,13 @@ func TestRepositoriesService_ListCodeFrequency(t *testing.T) {
 		fmt.Fprint(w, `[[1302998400, 1124, -435]]`)
 	})
 
-	code, _, err := client.Repositories.ListCodeFrequency("o", "r")
+	code, _, err := client.Repositories.ListCodeFrequency(context.Background(), "o", "r")
 	if err != nil {
 		t.Errorf("RepositoriesService.ListCodeFrequency returned error: %v", err)
 	}
 
 	want := []*WeeklyStats{{
-		Week:      &Timestamp{time.Date(2011, 04, 17, 00, 00, 00, 0, time.UTC).Local()},
+		Week:      &Timestamp{time.Date(2011, time.April, 17, 00, 00, 00, 0, time.UTC).Local()},
 		Additions: Int(1124),
 		Deletions: Int(-435),
 	}}
@@ -130,7 +131,7 @@ func TestRepositoriesService_ListCodeFrequency(t *testing.T) {
 }
 
 func TestRepositoriesService_Participation(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/repos/o/r/stats/participation", func(w http.ResponseWriter, r *http.Request) {
@@ -154,7 +155,7 @@ func TestRepositoriesService_Participation(t *testing.T) {
 `)
 	})
 
-	participation, _, err := client.Repositories.ListParticipation("o", "r")
+	participation, _, err := client.Repositories.ListParticipation(context.Background(), "o", "r")
 	if err != nil {
 		t.Errorf("RepositoriesService.ListParticipation returned error: %v", err)
 	}
@@ -180,7 +181,7 @@ func TestRepositoriesService_Participation(t *testing.T) {
 }
 
 func TestRepositoriesService_ListPunchCard(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/repos/o/r/stats/punch_card", func(w http.ResponseWriter, r *http.Request) {
@@ -193,7 +194,7 @@ func TestRepositoriesService_ListPunchCard(t *testing.T) {
 		]`)
 	})
 
-	card, _, err := client.Repositories.ListPunchCard("o", "r")
+	card, _, err := client.Repositories.ListPunchCard(context.Background(), "o", "r")
 	if err != nil {
 		t.Errorf("RepositoriesService.ListPunchCard returned error: %v", err)
 	}
