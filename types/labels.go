@@ -8,7 +8,8 @@ type LabelFile struct {
 
 // Label represents a label in the labels.yaml file.
 type Label struct {
-	Name  string `yaml:"name"`
-	Color string `yaml:"color"`
-	From  string `yaml:"from,omitempty"`
+	Name        string `yaml:"name"`
+	Color       string `yaml:"color"`
+	From        string `yaml:"from,omitempty"`
+	Description string `yaml:"description,omitempty"`
 }
