@@ -33,7 +33,7 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 					logs.V(0).Infof("Failed to rename label '%s' to '%s' with color '%s' to '%s'", *r.Name, l.Name, *r.Color, l.Color)
 					return nil, count, err
 				}
-				logs.V(6).Infof("Response: %s", resp)
+				logs.V(6).Infof("Response: %#v", resp)
 				logs.V(4).Infof("Renamed label '%s'", label)
 
 				count++
@@ -67,7 +67,7 @@ func Update(client *github.Client, opt *types.Options, local []*types.Label, rem
 				logs.V(0).Infof("Failed to update label '%s' with color '%s' to '%s'", l.Name, *r.Color, l.Name)
 				return nil, count, err
 			}
-			logs.V(6).Infof("Response: %s", resp)
+			logs.V(6).Infof("Response: %#v", resp)
 			logs.V(4).Infof("Updated label '%s'", label)
 
 			count++
@@ -101,7 +101,7 @@ func Create(client *github.Client, opt *types.Options, local []*types.Label, rem
 				logs.V(0).Infof("Failed to create label '%s' with color '%s'", l.Name, l.Color)
 				return nil, count, err
 			}
-			logs.V(6).Infof("Response: %s", resp)
+			logs.V(6).Infof("Response: %#v", resp)
 			logs.V(4).Infof("Created label '%s'", label)
 
 			count++
@@ -134,7 +134,7 @@ func Delete(client *github.Client, opt *types.Options, local []*types.Label, rem
 			logs.V(0).Infof("Failed to delete label '%s' with color '%s'", *l.Name, *l.Color)
 			return count, err
 		}
-		logs.V(6).Infof("Response: %s", resp)
+		logs.V(6).Infof("Response: %#v", resp)
 		logs.V(4).Infof("Deleted label '%s'", l)
 
 		count++
