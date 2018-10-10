@@ -1,6 +1,8 @@
 package writer
 
 import (
+	"context"
+
 	"github.com/google/go-github/github"
 	"github.com/tonglil/labeler/logs"
 	"github.com/tonglil/labeler/types"
@@ -25,7 +27,7 @@ func Rename(client *github.Client, opt *types.Options, local []*types.Label, rem
 					continue
 				}
 
-				label, resp, err := client.Issues.EditLabel(opt.RepoOwner(), opt.RepoName(), *r.Name, &github.Label{
+				label, resp, err := client.Issues.EditLabel(context.Background(), opt.RepoOwner(), opt.RepoName(), *r.Name, &github.Label{
 					Name:  &l.Name,
 					Color: &l.Color,
 				})
@@ -60,7 +62,7 @@ func Update(client *github.Client, opt *types.Options, local []*types.Label, rem
 				continue
 			}
 
-			label, resp, err := client.Issues.EditLabel(opt.RepoOwner(), opt.RepoName(), l.Name, &github.Label{
+			label, resp, err := client.Issues.EditLabel(context.Background(), opt.RepoOwner(), opt.RepoName(), l.Name, &github.Label{
 				Color: &l.Color,
 			})
 			if err != nil {
@@ -93,7 +95,7 @@ func Create(client *github.Client, opt *types.Options, local []*types.Label, rem
 				continue
 			}
 
-			label, resp, err := client.Issues.CreateLabel(opt.RepoOwner(), opt.RepoName(), &github.Label{
+			label, resp, err := client.Issues.CreateLabel(context.Background(), opt.RepoOwner(), opt.RepoName(), &github.Label{
 				Name:  &l.Name,
 				Color: &l.Color,
 			})
@@ -129,7 +131,7 @@ func Delete(client *github.Client, opt *types.Options, local []*types.Label, rem
 			continue
 		}
 
-		resp, err := client.Issues.DeleteLabel(opt.RepoOwner(), opt.RepoName(), *l.Name)
+		resp, err := client.Issues.DeleteLabel(context.Background(), opt.RepoOwner(), opt.RepoName(), *l.Name)
 		if err != nil {
 			logs.V(0).Infof("Failed to delete label '%s' with color '%s'", *l.Name, *l.Color)
 			return count, err

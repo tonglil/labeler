@@ -1,5 +1,5 @@
-hash: c3edc8099d615c5d4d77bde83cc38a06ddd6ca921e3ef13e0a2b248ec2f9b8dd
-updated: 2017-02-05T04:29:31.095892149-05:00
+hash: 2554dbc2bbea5c631c3c194c40a381aa0ad5ad66a938b684503b2a8dcecc753c
+updated: 2018-10-10T13:38:29.93028706+02:00
 imports:
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
@@ -8,7 +8,7 @@ imports:
   subpackages:
   - proto
 - name: github.com/google/go-github
-  version: 43e7458cf61b30944e822345dc028a649d7f87b4
+  version: f55b50f38167644bb7e4be03d9a2bde71d435239
   subpackages:
   - github
 - name: github.com/google/go-querystring

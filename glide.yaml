@@ -1,9 +1,6 @@
 package: github.com/tonglil/labeler
 import:
 - package: github.com/golang/glog
-- package: github.com/google/go-github
-  subpackages:
-  - github
 - package: golang.org/x/oauth2
 - package: gopkg.in/yaml.v2
 - package: github.com/google/go-querystring
@@ -14,3 +11,5 @@ import:
   subpackages:
   - context
 - package: github.com/tonglil/versioning
+- package: github.com/google/go-github
+  version: ~18.2.0
