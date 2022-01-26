@@ -6,6 +6,7 @@
 package github
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -14,7 +15,7 @@ import (
 )
 
 func TestGitService_GetCommit(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/repos/o/r/git/commits/s", func(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +24,7 @@ func TestGitService_GetCommit(t *testing.T) {
 		fmt.Fprint(w, `{"sha":"s","message":"m","author":{"name":"n"}}`)
 	})
 
-	commit, _, err := client.Git.GetCommit("o", "r", "s")
+	commit, _, err := client.Git.GetCommit(context.Background(), "o", "r", "s")
 	if err != nil {
 		t.Errorf("Git.GetCommit returned error: %v", err)
 	}
@@ -35,12 +36,15 @@ func TestGitService_GetCommit(t *testing.T) {
 }
 
 func TestGitService_GetCommit_invalidOwner(t *testing.T) {
-	_, _, err := client.Git.GetCommit("%", "%", "%")
+	client, _, _, teardown := setup()
+	defer teardown()
+
+	_, _, err := client.Git.GetCommit(context.Background(), "%", "%", "%")
 	testURLParseError(t, err)
 }
 
 func TestGitService_CreateCommit(t *testing.T) {
-	setup()
+	client, mux, _, teardown := setup()
 	defer teardown()
 
 	input := &Commit{
@@ -66,7 +70,7 @@ func TestGitService_CreateCommit(t *testing.T) {
 		fmt.Fprint(w, `{"sha":"s"}`)
 	})
 
-	commit, _, err := client.Git.CreateCommit("o", "r", input)
+	commit, _, err := client.Git.CreateCommit(context.Background(), "o", "r", input)
 	if err != nil {
 		t.Errorf("Git.CreateCommit returned error: %v", err)
 	}
@@ -78,6 +82,9 @@ func TestGitService_CreateCommit(t *testing.T) {
 }
 
 func TestGitService_CreateCommit_invalidOwner(t *testing.T) {
-	_, _, err := client.Git.CreateCommit("%", "%", nil)
+	client, _, _, teardown := setup()
+	defer teardown()
+
+	_, _, err := client.Git.CreateCommit(context.Background(), "%", "%", &Commit{})
 	testURLParseError(t, err)
 }
