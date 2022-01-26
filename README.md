@@ -1,3 +1,7 @@
+**Superseded by http://github.com/apps/settings**
+
+---
+
 # Labeler [![Build Status](https://travis-ci.org/tonglil/labeler.svg?branch=master)](https://travis-ci.org/tonglil/labeler)
 
 ![logo](http://i.imgur.com/5wOQl2m.png)
